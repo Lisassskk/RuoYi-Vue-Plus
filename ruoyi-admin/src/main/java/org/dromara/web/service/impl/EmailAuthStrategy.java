@@ -44,7 +44,7 @@ public class EmailAuthStrategy implements IAuthStrategy {
     private final SysUserMapper userMapper;
 
     @Override
-    public LoginVo login(String clientId, String body, SysClient client) {
+    public LoginVo login(String body, SysClient client) {
         EmailLoginBody loginBody = JsonUtils.parseObject(body, EmailLoginBody.class);
         ValidatorUtils.validate(loginBody);
         String tenantId = loginBody.getTenantId();
@@ -65,17 +65,14 @@ public class EmailAuthStrategy implements IAuthStrategy {
         // 例如: 后台用户30分钟过期 app用户1天过期
         model.setTimeout(client.getTimeout());
         model.setActiveTimeout(client.getActiveTimeout());
-        model.setExtra(LoginHelper.CLIENT_KEY, clientId);
+        model.setExtra(LoginHelper.CLIENT_KEY, client.getClientId());
         // 生成token
         LoginHelper.login(loginUser, model);
-
-        loginService.recordLogininfor(loginUser.getTenantId(), user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
-        loginService.recordLoginInfo(user.getUserId());
 
         LoginVo loginVo = new LoginVo();
         loginVo.setAccessToken(StpUtil.getTokenValue());
         loginVo.setExpireIn(StpUtil.getTokenTimeout());
-        loginVo.setClientId(clientId);
+        loginVo.setClientId(client.getClientId());
         return loginVo;
     }
 
@@ -92,21 +89,19 @@ public class EmailAuthStrategy implements IAuthStrategy {
     }
 
     private SysUserVo loadUserByEmail(String tenantId, String email) {
-        SysUser user = userMapper.selectOne(new LambdaQueryWrapper<SysUser>()
-            .select(SysUser::getEmail, SysUser::getStatus)
-            .eq(TenantHelper.isEnable(), SysUser::getTenantId, tenantId)
-            .eq(SysUser::getEmail, email));
-        if (ObjectUtil.isNull(user)) {
-            log.info("登录用户：{} 不存在.", email);
-            throw new UserException("user.not.exists", email);
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
-            log.info("登录用户：{} 已被停用.", email);
-            throw new UserException("user.blocked", email);
-        }
-        if (TenantHelper.isEnable()) {
-            return userMapper.selectTenantUserByEmail(email, tenantId);
-        }
-        return userMapper.selectUserByEmail(email);
+        return TenantHelper.dynamic(tenantId, () -> {
+            SysUser user = userMapper.selectOne(new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getEmail, SysUser::getStatus)
+                .eq(SysUser::getEmail, email));
+            if (ObjectUtil.isNull(user)) {
+                log.info("登录用户：{} 不存在.", email);
+                throw new UserException("user.not.exists", email);
+            } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+                log.info("登录用户：{} 已被停用.", email);
+                throw new UserException("user.blocked", email);
+            }
+            return userMapper.selectUserByEmail(email);
+        });
     }
 
 }

@@ -13,7 +13,7 @@
     <description>RuoYi-Vue-Plus多租户管理系统</description>
 
     <properties>
-        <revision>5.1.0</revision>
+        <revision>5.1.1</revision>
         <spring-boot.version>3.1.5</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -30,7 +30,7 @@
         <hutool.version>5.8.22</hutool.version>
         <okhttp.version>4.10.0</okhttp.version>
         <spring-boot-admin.version>3.1.7</spring-boot-admin.version>
-        <redisson.version>3.24.1</redisson.version>
+        <redisson.version>3.24.3</redisson.version>
         <lock4j.version>2.2.5</lock4j.version>
         <dynamic-ds.version>4.2.0</dynamic-ds.version>
         <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
@@ -67,7 +67,7 @@
             <properties>
                 <!-- 环境标识，需要与配置文件的名称相对应 -->
                 <profiles.active>local</profiles.active>
-                <logging.level>debug</logging.level>
+                <logging.level>info</logging.level>
             </properties>
         </profile>
         <profile>
@@ -75,7 +75,7 @@
             <properties>
                 <!-- 环境标识，需要与配置文件的名称相对应 -->
                 <profiles.active>dev</profiles.active>
-                <logging.level>debug</logging.level>
+                <logging.level>info</logging.level>
             </properties>
             <activation>
                 <!-- 默认环境 -->
