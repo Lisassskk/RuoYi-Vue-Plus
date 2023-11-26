@@ -20,6 +20,7 @@ import org.dromara.workflow.domain.WfCategory;
 import org.dromara.workflow.domain.bo.ProcessDefinitionBo;
 import org.dromara.workflow.domain.vo.ProcessDefinitionVo;
 import org.dromara.workflow.service.IActProcessDefinitionService;
+import org.dromara.workflow.service.IWfCategoryService;
 import org.flowable.editor.constants.ModelDataJsonConstants;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.ProcessMigrationService;
@@ -55,7 +56,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
 
     private final ProcessMigrationService processMigrationService;
 
-    private final WfCategoryServiceImpl wfCategoryService;
+    private final IWfCategoryService iWfCategoryService;
 
     /**
      * 分页查询
@@ -205,7 +206,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServiceException("操作失败:"+e.getMessage());
+            throw new ServiceException("操作失败:" + e.getMessage());
         }
     }
 
@@ -280,8 +281,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
     @Override
     public boolean deployByFile(MultipartFile file, String categoryCode) {
         try {
-
-            WfCategory wfCategory = wfCategoryService.queryByCategoryCode(categoryCode);
+            WfCategory wfCategory = iWfCategoryService.queryByCategoryCode(categoryCode);
             if (wfCategory == null) {
                 throw new ServiceException("流程分类不存在");
             }
