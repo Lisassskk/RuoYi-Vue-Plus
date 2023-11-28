@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.dromara.common.core.exception.ServiceException;
+import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.tenant.helper.TenantHelper;
@@ -56,7 +57,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
 
     private final ProcessMigrationService processMigrationService;
 
-    private final IWfCategoryService iWfCategoryService;
+    private final IWfCategoryService wfCategoryService;
 
     /**
      * 分页查询
@@ -65,7 +66,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
      * @return 返回分页列表
      */
     @Override
-    public TableDataInfo<ProcessDefinitionVo> getByPage(ProcessDefinitionBo processDefinitionBo) {
+    public TableDataInfo<ProcessDefinitionVo> page(ProcessDefinitionBo processDefinitionBo) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
         query.processDefinitionTenantId(TenantHelper.getTenantId());
         if (StringUtils.isNotEmpty(processDefinitionBo.getKey())) {
@@ -82,9 +83,8 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
         List<ProcessDefinition> definitionList = query.latestVersion().listPage(processDefinitionBo.getPageNum(), processDefinitionBo.getPageSize());
         List<Deployment> deploymentList = null;
         if (CollUtil.isNotEmpty(definitionList)) {
-            List<String> deploymentIds = definitionList.stream().map(ProcessDefinition::getDeploymentId).collect(Collectors.toList());
-            deploymentList = repositoryService.createDeploymentQuery()
-                .deploymentIds(deploymentIds).list();
+            List<String> deploymentIds = StreamUtils.toList(definitionList, ProcessDefinition::getDeploymentId);
+            deploymentList = repositoryService.createDeploymentQuery().deploymentIds(deploymentIds).list();
         }
         for (ProcessDefinition processDefinition : definitionList) {
             ProcessDefinitionVo processDefinitionVo = BeanUtil.toBean(processDefinition, ProcessDefinitionVo.class);
@@ -281,7 +281,7 @@ public class ActProcessDefinitionServiceImpl implements IActProcessDefinitionSer
     @Override
     public boolean deployByFile(MultipartFile file, String categoryCode) {
         try {
-            WfCategory wfCategory = iWfCategoryService.queryByCategoryCode(categoryCode);
+            WfCategory wfCategory = wfCategoryService.queryByCategoryCode(categoryCode);
             if (wfCategory == null) {
                 throw new ServiceException("流程分类不存在");
             }

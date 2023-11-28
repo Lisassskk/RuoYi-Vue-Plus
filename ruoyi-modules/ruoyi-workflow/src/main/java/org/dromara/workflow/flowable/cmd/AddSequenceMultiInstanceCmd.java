@@ -1,5 +1,6 @@
 package org.dromara.workflow.flowable.cmd;
 
+import cn.hutool.core.collection.CollUtil;
 import org.flowable.common.engine.impl.interceptor.Command;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
@@ -44,15 +45,17 @@ public class AddSequenceMultiInstanceCmd implements Command<Void> {
     public Void execute(CommandContext commandContext) {
         ExecutionEntityManager executionEntityManager = CommandContextUtil.getExecutionEntityManager();
         ExecutionEntity entity = executionEntityManager.findById(executionId);
-        //多实例任务总数加assignees.size()
-        Integer nrOfInstances = (Integer) entity.getVariable(NUMBER_OF_INSTANCES);
-        entity.setVariable(NUMBER_OF_INSTANCES, nrOfInstances + assignees.size());
+        // 多实例任务总数加 assignees.size()
+        if (entity.getVariable(NUMBER_OF_INSTANCES) instanceof Integer nrOfInstances) {
+            entity.setVariable(NUMBER_OF_INSTANCES, nrOfInstances + assignees.size());
+        }
         // 设置流程变量
-        List<Long> userIds = (List) entity.getVariable(assigneeList);
-        userIds.addAll(assignees);
-        Map<String, Object> variables = new HashMap<>(16);
-        variables.put(assigneeList, userIds);
-        entity.setVariables(variables);
+        if (entity.getVariable(assigneeList) instanceof List<?> userIds) {
+            CollUtil.addAll(userIds, assignees);
+            Map<String, Object> variables = new HashMap<>(16);
+            variables.put(assigneeList, userIds);
+            entity.setVariables(variables);
+        }
         return null;
     }
 }

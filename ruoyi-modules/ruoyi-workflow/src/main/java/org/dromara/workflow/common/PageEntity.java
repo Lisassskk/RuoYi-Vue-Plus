@@ -1,11 +1,14 @@
 package org.dromara.workflow.common;
 
 
+import lombok.Data;
+
 /**
  * 分页参数
  *
  * @author may
  */
+@Data
 public class PageEntity {
 
     /**
@@ -22,15 +25,4 @@ public class PageEntity {
         return (pageNum - 1) * pageSize;
     }
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
 }

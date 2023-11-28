@@ -1,24 +1,24 @@
 package org.dromara.workflow.service.impl;
 
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.core.utils.StringUtils;
+import org.dromara.workflow.domain.WfCategory;
+import org.dromara.workflow.domain.bo.WfCategoryBo;
+import org.dromara.workflow.domain.vo.WfCategoryVo;
+import org.dromara.workflow.mapper.WfCategoryMapper;
+import org.dromara.workflow.service.IWfCategoryService;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.Model;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Service;
-import org.dromara.workflow.domain.bo.WfCategoryBo;
-import org.dromara.workflow.domain.vo.WfCategoryVo;
-import org.dromara.workflow.domain.WfCategory;
-import org.dromara.workflow.mapper.WfCategoryMapper;
-import org.dromara.workflow.service.IWfCategoryService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 流程分类Service业务层处理
@@ -84,11 +84,11 @@ public class WfCategoryServiceImpl implements IWfCategoryService {
         WfCategoryVo wfCategoryVo = baseMapper.selectVoById(bo.getId());
         List<ProcessDefinition> processDefinitionList = repositoryService.createProcessDefinitionQuery().processDefinitionCategory(wfCategoryVo.getCategoryCode()).list();
         for (ProcessDefinition processDefinition : processDefinitionList) {
-            repositoryService.setProcessDefinitionCategory(processDefinition.getId(),bo.getCategoryCode());
+            repositoryService.setProcessDefinitionCategory(processDefinition.getId(), bo.getCategoryCode());
         }
         List<Deployment> deploymentList = repositoryService.createDeploymentQuery().deploymentCategory(wfCategoryVo.getCategoryCode()).list();
         for (Deployment deployment : deploymentList) {
-            repositoryService.setDeploymentCategory(deployment.getId(),bo.getCategoryCode());
+            repositoryService.setDeploymentCategory(deployment.getId(), bo.getCategoryCode());
         }
         List<Model> modelList = repositoryService.createModelQuery().modelCategory(wfCategoryVo.getCategoryCode()).list();
         for (Model model : modelList) {

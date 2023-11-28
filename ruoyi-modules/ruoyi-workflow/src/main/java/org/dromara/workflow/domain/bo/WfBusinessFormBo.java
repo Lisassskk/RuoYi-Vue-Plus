@@ -1,13 +1,14 @@
 package org.dromara.workflow.domain.bo;
 
-import org.dromara.workflow.domain.WfBusinessForm;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-import org.dromara.common.core.validate.AddGroup;
-import org.dromara.common.core.validate.EditGroup;
 import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
+import org.dromara.common.core.validate.AddGroup;
+import org.dromara.common.core.validate.EditGroup;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.workflow.domain.WfBusinessForm;
 
 /**
  * 发起流程业务对象 wf_business_form
@@ -23,7 +24,7 @@ public class WfBusinessFormBo extends BaseEntity {
     /**
      * 主键
      */
-    @NotNull(message = "主键不能为空", groups = { EditGroup.class })
+    @NotNull(message = "主键不能为空", groups = {EditGroup.class})
     private Long id;
 
     /**
@@ -34,19 +35,19 @@ public class WfBusinessFormBo extends BaseEntity {
     /**
      * 表单id
      */
-    @NotNull(message = "表单id不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "表单id不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long formId;
 
     /**
      * 表单名称
      */
-    @NotBlank(message = "表单名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "表单名称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String formName;
 
     /**
      * 表单内容
      */
-    @NotBlank(message = "表单内容不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "表单内容不能为空", groups = {AddGroup.class, EditGroup.class})
     private String content;
 
     /**

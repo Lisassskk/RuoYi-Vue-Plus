@@ -20,7 +20,7 @@ public interface IActModelService {
      * @param modelBo 模型参数
      * @return 返回分页列表
      */
-    TableDataInfo<Model> getByPage(ModelBo modelBo);
+    TableDataInfo<Model> page(ModelBo modelBo);
 
     /**
      * 新增模型

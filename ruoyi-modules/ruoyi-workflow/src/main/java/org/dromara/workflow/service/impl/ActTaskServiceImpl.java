@@ -3,6 +3,7 @@ package org.dromara.workflow.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -218,12 +219,12 @@ public class ActTaskServiceImpl implements IActTaskService {
             if (CollUtil.isNotEmpty(processInstanceList)) {
                 processInstanceList.stream().filter(e -> e.getId().equals(task.getProcessInstanceId())).findFirst().ifPresent(e -> {
                     taskVo.setBusinessStatus(e.getBusinessStatus());
-                    taskVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(taskVo.getBusinessStatus()));
+                    taskVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(taskVo.getBusinessStatus()));
                     taskVo.setProcessDefinitionKey(e.getProcessDefinitionKey());
                     taskVo.setProcessDefinitionName(e.getProcessDefinitionName());
                 });
             }
-            taskVo.setAssignee(StringUtils.isNotBlank(task.getAssignee()) ? Long.valueOf(task.getAssignee()) : null);
+            taskVo.setAssignee(Convert.toLong(task.getAssignee()));
             taskVo.setParticipantVo(WorkflowUtils.getCurrentTaskParticipant(task.getId()));
             taskVo.setMultiInstance(WorkflowUtils.isMultiInstance(task.getProcessDefinitionId(), task.getTaskDefinitionKey()) != null);
             list.add(taskVo);
@@ -261,7 +262,7 @@ public class ActTaskServiceImpl implements IActTaskService {
             if (CollUtil.isNotEmpty(processInstanceList)) {
                 processInstanceList.stream().filter(e -> e.getId().equals(task.getProcessInstanceId())).findFirst().ifPresent(e -> {
                     taskVo.setBusinessStatus(e.getBusinessStatus());
-                    taskVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(taskVo.getBusinessStatus()));
+                    taskVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(taskVo.getBusinessStatus()));
                     taskVo.setProcessDefinitionKey(e.getProcessDefinitionKey());
                     taskVo.setProcessDefinitionName(e.getProcessDefinitionName());
                 });
@@ -306,7 +307,7 @@ public class ActTaskServiceImpl implements IActTaskService {
             if (CollUtil.isNotEmpty(historicProcessInstanceList)) {
                 historicProcessInstanceList.stream().filter(e -> e.getId().equals(task.getProcessInstanceId())).findFirst().ifPresent(e -> {
                     taskVo.setBusinessStatus(e.getBusinessStatus());
-                    taskVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(taskVo.getBusinessStatus()));
+                    taskVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(taskVo.getBusinessStatus()));
                     taskVo.setProcessDefinitionKey(e.getProcessDefinitionKey());
                     taskVo.setProcessDefinitionName(e.getProcessDefinitionName());
                 });
@@ -348,12 +349,12 @@ public class ActTaskServiceImpl implements IActTaskService {
             if (CollUtil.isNotEmpty(historicProcessInstanceList)) {
                 historicProcessInstanceList.stream().filter(e -> e.getId().equals(task.getProcessInstanceId())).findFirst().ifPresent(e -> {
                     taskVo.setBusinessStatus(e.getBusinessStatus());
-                    taskVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(taskVo.getBusinessStatus()));
+                    taskVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(taskVo.getBusinessStatus()));
                     taskVo.setProcessDefinitionKey(e.getProcessDefinitionKey());
                     taskVo.setProcessDefinitionName(e.getProcessDefinitionName());
                 });
             }
-            taskVo.setAssignee(StringUtils.isNotBlank(task.getAssignee()) ? Long.valueOf(task.getAssignee()) : null);
+            taskVo.setAssignee(Convert.toLong(task.getAssignee()));
             list.add(taskVo);
         }
         long count = query.count();

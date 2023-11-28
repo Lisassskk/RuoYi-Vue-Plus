@@ -9,7 +9,10 @@ import org.dromara.workflow.domain.bo.SysUserMultiBo;
 import org.dromara.workflow.domain.vo.TaskVo;
 import org.dromara.workflow.service.IWorkflowUserService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ import java.util.List;
 @RequestMapping("/workflow/user")
 public class WorkflowUserController extends BaseController {
 
-    private final IWorkflowUserService iWorkflowUserService;
+    private final IWorkflowUserService workflowUserService;
 
     /**
      * 分页查询工作流选择加签人员
@@ -34,7 +37,7 @@ public class WorkflowUserController extends BaseController {
      */
     @GetMapping("/getWorkflowAddMultiListByPage")
     public TableDataInfo<SysUserVo> getWorkflowAddMultiInstanceByPage(SysUserMultiBo sysUserMultiBo) {
-        return iWorkflowUserService.getWorkflowAddMultiInstanceByPage(sysUserMultiBo);
+        return workflowUserService.getWorkflowAddMultiInstanceByPage(sysUserMultiBo);
     }
 
     /**
@@ -44,7 +47,7 @@ public class WorkflowUserController extends BaseController {
      */
     @GetMapping("/getWorkflowDeleteMultiInstanceList/{taskId}")
     public R<List<TaskVo>> getWorkflowDeleteMultiInstanceList(@PathVariable String taskId) {
-        return R.ok(iWorkflowUserService.getWorkflowDeleteMultiInstanceList(taskId));
+        return R.ok(workflowUserService.getWorkflowDeleteMultiInstanceList(taskId));
     }
 
     /**
@@ -54,6 +57,6 @@ public class WorkflowUserController extends BaseController {
      */
     @GetMapping("/getUserListByIds/{userIds}")
     public R<List<SysUserVo>> getUserListByIds(@PathVariable List<Long> userIds) {
-        return R.ok(iWorkflowUserService.getUserListByIds(userIds));
+        return R.ok(workflowUserService.getUserListByIds(userIds));
     }
 }

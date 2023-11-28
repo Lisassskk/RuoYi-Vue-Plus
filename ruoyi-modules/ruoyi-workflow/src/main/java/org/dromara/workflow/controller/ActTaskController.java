@@ -1,5 +1,6 @@
 package org.dromara.workflow.controller;
 
+import cn.hutool.core.convert.Convert;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
@@ -31,7 +32,7 @@ import java.util.Map;
 @RequestMapping("/workflow/task")
 public class ActTaskController extends BaseController {
 
-    private final IActTaskService iActTaskService;
+    private final IActTaskService actTaskService;
 
     private final TaskService taskService;
 
@@ -45,7 +46,7 @@ public class ActTaskController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/startWorkFlow")
     public R<Map<String, Object>> startWorkFlow(@RequestBody StartProcessBo startProcessBo) {
-        Map<String, Object> map = iActTaskService.startWorkFlow(startProcessBo);
+        Map<String, Object> map = actTaskService.startWorkFlow(startProcessBo);
         return R.ok("提交成功", map);
     }
 
@@ -58,7 +59,7 @@ public class ActTaskController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/completeTask")
     public R<Void> completeTask(@Validated(AddGroup.class) @RequestBody CompleteTaskBo completeTaskBo) {
-        return toAjax(iActTaskService.completeTask(completeTaskBo));
+        return toAjax(actTaskService.completeTask(completeTaskBo));
     }
 
     /**
@@ -68,7 +69,7 @@ public class ActTaskController extends BaseController {
      */
     @GetMapping("/getTaskWaitByPage")
     public TableDataInfo<TaskVo> getTaskWaitByPage(TaskBo taskBo) {
-        return iActTaskService.getTaskWaitByPage(taskBo);
+        return actTaskService.getTaskWaitByPage(taskBo);
     }
 
     /**
@@ -78,7 +79,7 @@ public class ActTaskController extends BaseController {
      */
     @GetMapping("/getAllTaskWaitByPage")
     public TableDataInfo<TaskVo> getAllTaskWaitByPage(TaskBo taskBo) {
-        return iActTaskService.getAllTaskWaitByPage(taskBo);
+        return actTaskService.getAllTaskWaitByPage(taskBo);
     }
 
     /**
@@ -88,7 +89,7 @@ public class ActTaskController extends BaseController {
      */
     @GetMapping("/getTaskFinishByPage")
     public TableDataInfo<TaskVo> getTaskFinishByPage(TaskBo taskBo) {
-        return iActTaskService.getTaskFinishByPage(taskBo);
+        return actTaskService.getTaskFinishByPage(taskBo);
     }
 
     /**
@@ -98,7 +99,7 @@ public class ActTaskController extends BaseController {
      */
     @GetMapping("/getAllTaskFinishByPage")
     public TableDataInfo<TaskVo> getAllTaskFinishByPage(TaskBo taskBo) {
-        return iActTaskService.getAllTaskFinishByPage(taskBo);
+        return actTaskService.getAllTaskFinishByPage(taskBo);
     }
 
     /**
@@ -110,7 +111,7 @@ public class ActTaskController extends BaseController {
     @PostMapping("/claim/{taskId}")
     public R<Void> claimTask(@NotBlank(message = "任务id不能为空") @PathVariable String taskId) {
         try {
-            taskService.claim(taskId, String.valueOf(LoginHelper.getUserId()));
+            taskService.claim(taskId, Convert.toStr(LoginHelper.getUserId()));
             return R.ok();
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,7 +144,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.INSERT)
     @PostMapping("/delegateTask")
     public R<Void> delegateTask(@Validated({AddGroup.class}) @RequestBody DelegateBo delegateBo) {
-        return toAjax(iActTaskService.delegateTask(delegateBo));
+        return toAjax(actTaskService.delegateTask(delegateBo));
     }
 
     /**
@@ -154,7 +155,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.DELETE)
     @PostMapping("/terminationTask")
     public R<Void> terminationTask(@RequestBody TerminationBo terminationBo) {
-        return toAjax(iActTaskService.terminationTask(terminationBo));
+        return toAjax(actTaskService.terminationTask(terminationBo));
     }
 
     /**
@@ -165,7 +166,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.INSERT)
     @PostMapping("/transferTask")
     public R<Void> transferTask(@Validated({AddGroup.class}) @RequestBody TransmitBo transmitBo) {
-        return toAjax(iActTaskService.transferTask(transmitBo));
+        return toAjax(actTaskService.transferTask(transmitBo));
     }
 
     /**
@@ -176,7 +177,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.INSERT)
     @PostMapping("/addMultiInstanceExecution")
     public R<Void> addMultiInstanceExecution(@Validated({AddGroup.class}) @RequestBody AddMultiBo addMultiBo) {
-        return toAjax(iActTaskService.addMultiInstanceExecution(addMultiBo));
+        return toAjax(actTaskService.addMultiInstanceExecution(addMultiBo));
     }
 
     /**
@@ -187,7 +188,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.INSERT)
     @PostMapping("/deleteMultiInstanceExecution")
     public R<Void> deleteMultiInstanceExecution(@Validated({AddGroup.class}) @RequestBody DeleteMultiBo deleteMultiBo) {
-        return toAjax(iActTaskService.deleteMultiInstanceExecution(deleteMultiBo));
+        return toAjax(actTaskService.deleteMultiInstanceExecution(deleteMultiBo));
     }
 
     /**
@@ -198,7 +199,7 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.INSERT)
     @PostMapping("/backProcess")
     public R<String> backProcess(@RequestBody BackProcessBo backProcessBo) {
-        return R.ok(iActTaskService.backProcess(backProcessBo));
+        return R.ok(actTaskService.backProcess(backProcessBo));
     }
 
     /**
@@ -221,6 +222,6 @@ public class ActTaskController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.UPDATE)
     @PutMapping("/updateAssignee/{taskIds}/{userId}")
     public R<Void> updateAssignee(@PathVariable String[] taskIds, @PathVariable String userId) {
-        return toAjax(iActTaskService.updateAssignee(taskIds, userId));
+        return toAjax(actTaskService.updateAssignee(taskIds, userId));
     }
 }

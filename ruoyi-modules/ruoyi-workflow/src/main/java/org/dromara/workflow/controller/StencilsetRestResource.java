@@ -12,8 +12,11 @@
  */
 package org.dromara.workflow.controller;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -25,14 +28,12 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/workflow/model")
 public class StencilsetRestResource {
 
-  @GetMapping(value="/rest/stencil-sets/editor")
-  public String getStencilset() {
-    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("static/stencilset.json");
-    try {
-        assert inputStream != null;
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-    } catch (Exception e) {
-      throw new SecurityException("Error while loading stencil set", e);
+    @GetMapping(value = "/rest/stencil-sets/editor")
+    public String getStencilset() {
+        try (InputStream inputStream = ResourceUtil.getStream("static/stencilset.json")) {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new SecurityException("Error while loading stencil set", e);
+        }
     }
-  }
 }

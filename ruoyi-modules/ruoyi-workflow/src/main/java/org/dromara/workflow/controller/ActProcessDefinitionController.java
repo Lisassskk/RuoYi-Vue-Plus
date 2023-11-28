@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
+import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.log.annotation.Log;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -15,7 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -29,7 +32,7 @@ import java.util.*;
 @RequestMapping("/workflow/processDefinition")
 public class ActProcessDefinitionController extends BaseController {
 
-    private final IActProcessDefinitionService iActProcessDefinitionService;
+    private final IActProcessDefinitionService actProcessDefinitionService;
 
     /**
      * 分页查询
@@ -37,8 +40,8 @@ public class ActProcessDefinitionController extends BaseController {
      * @param processDefinitionBo 参数
      */
     @GetMapping("/list")
-    public TableDataInfo<ProcessDefinitionVo> getByPage(ProcessDefinitionBo processDefinitionBo) {
-        return iActProcessDefinitionService.getByPage(processDefinitionBo);
+    public TableDataInfo<ProcessDefinitionVo> page(ProcessDefinitionBo processDefinitionBo) {
+        return actProcessDefinitionService.page(processDefinitionBo);
     }
 
     /**
@@ -48,7 +51,7 @@ public class ActProcessDefinitionController extends BaseController {
      */
     @GetMapping("/getProcessDefinitionListByKey/{key}")
     public R<List<ProcessDefinitionVo>> getProcessDefinitionListByKey(@NotEmpty(message = "流程定义key不能为空") @PathVariable String key) {
-        return R.ok("操作成功", iActProcessDefinitionService.getProcessDefinitionListByKey(key));
+        return R.ok("操作成功", actProcessDefinitionService.getProcessDefinitionListByKey(key));
     }
 
     /**
@@ -58,7 +61,7 @@ public class ActProcessDefinitionController extends BaseController {
      */
     @GetMapping("/processDefinitionImage/{processDefinitionId}")
     public R<String> processDefinitionImage(@PathVariable String processDefinitionId) {
-        return R.ok("操作成功", iActProcessDefinitionService.processDefinitionImage(processDefinitionId));
+        return R.ok("操作成功", actProcessDefinitionService.processDefinitionImage(processDefinitionId));
     }
 
     /**
@@ -69,9 +72,8 @@ public class ActProcessDefinitionController extends BaseController {
     @GetMapping("/processDefinitionXml/{processDefinitionId}")
     public R<Map<String, Object>> getXml(@NotBlank(message = "流程定义id不能为空") @PathVariable String processDefinitionId) {
         Map<String, Object> map = new HashMap<>();
-        String xmlStr = iActProcessDefinitionService.processDefinitionXml(processDefinitionId);
-        List<String> xml = new ArrayList<>(Arrays.asList(xmlStr.split("\n")));
-        map.put("xml", xml);
+        String xmlStr = actProcessDefinitionService.processDefinitionXml(processDefinitionId);
+        map.put("xml", StringUtils.splitList("\n"));
         map.put("xmlStr", xmlStr);
         return R.ok(map);
     }
@@ -86,7 +88,7 @@ public class ActProcessDefinitionController extends BaseController {
     @DeleteMapping("/{deploymentId}/{processDefinitionId}")
     public R<Void> deleteDeployment(@NotBlank(message = "流程部署id不能为空") @PathVariable String deploymentId,
                                     @NotBlank(message = "流程定义id不能为空") @PathVariable String processDefinitionId) {
-        return toAjax(iActProcessDefinitionService.deleteDeployment(deploymentId, processDefinitionId));
+        return toAjax(actProcessDefinitionService.deleteDeployment(deploymentId, processDefinitionId));
     }
 
     /**
@@ -97,7 +99,7 @@ public class ActProcessDefinitionController extends BaseController {
     @Log(title = "流程定义管理", businessType = BusinessType.UPDATE)
     @PutMapping("/updateProcessDefState/{processDefinitionId}")
     public R<Void> updateProcDefState(@NotBlank(message = "流程定义id不能为空") @PathVariable String processDefinitionId) {
-        return toAjax(iActProcessDefinitionService.updateProcessDefState(processDefinitionId));
+        return toAjax(actProcessDefinitionService.updateProcessDefState(processDefinitionId));
     }
 
     /**
@@ -110,7 +112,7 @@ public class ActProcessDefinitionController extends BaseController {
     @PutMapping("/migrationProcessDefinition/{currentProcessDefinitionId}/{fromProcessDefinitionId}")
     public R<Void> migrationProcessDefinition(@NotBlank(message = "当前流程定义id") @PathVariable String currentProcessDefinitionId,
                                               @NotBlank(message = "需要迁移到的流程定义id") @PathVariable String fromProcessDefinitionId) {
-        return toAjax(iActProcessDefinitionService.migrationProcessDefinition(currentProcessDefinitionId, fromProcessDefinitionId));
+        return toAjax(actProcessDefinitionService.migrationProcessDefinition(currentProcessDefinitionId, fromProcessDefinitionId));
     }
 
     /**
@@ -121,7 +123,7 @@ public class ActProcessDefinitionController extends BaseController {
     @Log(title = "流程定义管理", businessType = BusinessType.UPDATE)
     @PutMapping("/convertToModel/{processDefinitionId}")
     public R<Void> convertToModel(@NotEmpty(message = "流程定义id不能为空") @PathVariable String processDefinitionId) {
-        return toAjax(iActProcessDefinitionService.convertToModel(processDefinitionId));
+        return toAjax(actProcessDefinitionService.convertToModel(processDefinitionId));
     }
 
     /**
@@ -133,6 +135,6 @@ public class ActProcessDefinitionController extends BaseController {
     @Log(title = "流程定义管理", businessType = BusinessType.INSERT)
     @PostMapping("/deployByFile")
     public R<Void> deployByFile(@RequestParam("file") MultipartFile file, @RequestParam("categoryCode") String categoryCode) {
-        return toAjax(iActProcessDefinitionService.deployByFile(file, categoryCode));
+        return toAjax(actProcessDefinitionService.deployByFile(file, categoryCode));
     }
 }

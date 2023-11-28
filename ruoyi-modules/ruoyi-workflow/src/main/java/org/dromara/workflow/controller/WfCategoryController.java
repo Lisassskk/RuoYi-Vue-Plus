@@ -1,24 +1,25 @@
 package org.dromara.workflow.controller;
 
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
-import org.dromara.common.idempotent.annotation.RepeatSubmit;
-import org.dromara.common.log.annotation.Log;
-import org.dromara.common.web.core.BaseController;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
-import org.dromara.workflow.domain.vo.WfCategoryVo;
+import org.dromara.common.idempotent.annotation.RepeatSubmit;
+import org.dromara.common.log.annotation.Log;
+import org.dromara.common.log.enums.BusinessType;
+import org.dromara.common.web.core.BaseController;
 import org.dromara.workflow.domain.bo.WfCategoryBo;
+import org.dromara.workflow.domain.vo.WfCategoryVo;
 import org.dromara.workflow.service.IWfCategoryService;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 流程分类
@@ -64,7 +65,7 @@ public class WfCategoryController extends BaseController {
     @SaCheckPermission("workflow:category:query")
     @GetMapping("/{id}")
     public R<WfCategoryVo> getInfo(@NotNull(message = "主键不能为空")
-                                     @PathVariable Long id) {
+                                   @PathVariable Long id) {
         return R.ok(wfCategoryService.queryById(id));
     }
 

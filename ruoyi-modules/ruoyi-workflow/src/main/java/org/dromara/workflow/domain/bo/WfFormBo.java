@@ -28,31 +28,31 @@ public class WfFormBo extends BaseEntity {
     /**
      * 表单主键
      */
-    @NotNull(message = "表单ID不能为空", groups = { EditGroup.class })
+    @NotNull(message = "表单ID不能为空", groups = {EditGroup.class})
     private Long formId;
 
     /**
      * 表单名称
      */
-    @NotBlank(message = "表单名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "表单名称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String formName;
 
     /**
      * 表单配置
      */
-    @NotBlank(message = "表单配置不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "表单配置不能为空", groups = {AddGroup.class, EditGroup.class})
     private String formConfig;
 
     /**
      * 表单内容
      */
-    @NotBlank(message = "表单内容不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "表单内容不能为空", groups = {AddGroup.class, EditGroup.class})
     private String content;
 
     /**
      * 状态（0正常 1停用）
      */
-    @NotBlank(message = "状态不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "状态不能为空", groups = {AddGroup.class, EditGroup.class})
     private String status;
 
     /**

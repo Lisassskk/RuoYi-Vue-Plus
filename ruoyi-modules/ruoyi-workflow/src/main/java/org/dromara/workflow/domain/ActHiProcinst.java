@@ -1,12 +1,13 @@
 package org.dromara.workflow.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-
-import java.io.Serial;
 
 /**
  * 流程实例对象 act_hi_procinst

@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/workflow/processInstance")
 public class ActProcessInstanceController extends BaseController {
 
-    private final IActProcessInstanceService iActProcessInstanceService;
+    private final IActProcessInstanceService actProcessInstanceService;
 
     /**
      * 分页查询正在运行的流程实例
@@ -40,7 +40,7 @@ public class ActProcessInstanceController extends BaseController {
      */
     @GetMapping("/getProcessInstanceRunningByPage")
     public TableDataInfo<ProcessInstanceVo> getProcessInstanceRunningByPage(ProcessInstanceBo processInstanceBo) {
-        return iActProcessInstanceService.getProcessInstanceRunningByPage(processInstanceBo);
+        return actProcessInstanceService.getProcessInstanceRunningByPage(processInstanceBo);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ActProcessInstanceController extends BaseController {
      */
     @GetMapping("/getProcessInstanceFinishByPage")
     public TableDataInfo<ProcessInstanceVo> getProcessInstanceFinishByPage(ProcessInstanceBo processInstanceBo) {
-        return iActProcessInstanceService.getProcessInstanceFinishByPage(processInstanceBo);
+        return actProcessInstanceService.getProcessInstanceFinishByPage(processInstanceBo);
     }
 
     /**
@@ -60,7 +60,7 @@ public class ActProcessInstanceController extends BaseController {
      */
     @GetMapping("/getHistoryProcessImage/{processInstanceId}")
     public R<String> getHistoryProcessImage(@NotBlank(message = "流程实例id不能为空") @PathVariable String processInstanceId) {
-        return R.ok("操作成功", iActProcessInstanceService.getHistoryProcessImage(processInstanceId));
+        return R.ok("操作成功", actProcessInstanceService.getHistoryProcessImage(processInstanceId));
     }
 
     /**
@@ -70,7 +70,7 @@ public class ActProcessInstanceController extends BaseController {
      */
     @GetMapping("/getHistoryRecord/{processInstanceId}")
     public R<Map<String, Object>> getHistoryRecord(@NotBlank(message = "流程实例id不能为空") @PathVariable String processInstanceId) {
-        return R.ok(iActProcessInstanceService.getHistoryRecord(processInstanceId));
+        return R.ok(actProcessInstanceService.getHistoryRecord(processInstanceId));
     }
 
     /**
@@ -81,7 +81,7 @@ public class ActProcessInstanceController extends BaseController {
     @Log(title = "流程实例管理", businessType = BusinessType.DELETE)
     @PostMapping("/deleteRuntimeProcessInst")
     public R<Void> deleteRuntimeProcessInst(@Validated(AddGroup.class) @RequestBody ProcessInvalidBo processInvalidBo) {
-        return toAjax(iActProcessInstanceService.deleteRuntimeProcessInst(processInvalidBo));
+        return toAjax(actProcessInstanceService.deleteRuntimeProcessInst(processInvalidBo));
     }
 
     /**
@@ -92,7 +92,7 @@ public class ActProcessInstanceController extends BaseController {
     @Log(title = "流程实例管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/deleteRuntimeProcessAndHisInst/{processInstanceIds}")
     public R<Void> deleteRuntimeProcessAndHisInst(@NotNull(message = "流程实例id不能为空") @PathVariable String[] processInstanceIds) {
-        return toAjax(iActProcessInstanceService.deleteRuntimeProcessAndHisInst(Arrays.asList(processInstanceIds)));
+        return toAjax(actProcessInstanceService.deleteRuntimeProcessAndHisInst(Arrays.asList(processInstanceIds)));
     }
 
     /**
@@ -103,7 +103,7 @@ public class ActProcessInstanceController extends BaseController {
     @Log(title = "流程实例管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/deleteFinishProcessAndHisInst/{processInstanceIds}")
     public R<Void> deleteFinishProcessAndHisInst(@NotNull(message = "流程实例id不能为空") @PathVariable String[] processInstanceIds) {
-        return toAjax(iActProcessInstanceService.deleteFinishProcessAndHisInst(Arrays.asList(processInstanceIds)));
+        return toAjax(actProcessInstanceService.deleteFinishProcessAndHisInst(Arrays.asList(processInstanceIds)));
     }
 
     /**
@@ -114,7 +114,7 @@ public class ActProcessInstanceController extends BaseController {
     @Log(title = "流程实例管理", businessType = BusinessType.INSERT)
     @PostMapping("/cancelProcessApply/{processInstanceId}")
     public R<Void> cancelProcessApply(@NotBlank(message = "流程实例id不能为空") @PathVariable String processInstanceId) {
-        return toAjax(iActProcessInstanceService.cancelProcessApply(processInstanceId));
+        return toAjax(actProcessInstanceService.cancelProcessApply(processInstanceId));
     }
 
     /**
@@ -124,7 +124,7 @@ public class ActProcessInstanceController extends BaseController {
      */
     @GetMapping("/getCurrentSubmitByPage")
     public TableDataInfo<ProcessInstanceVo> getCurrentSubmitByPage(ProcessInstanceBo processInstanceBo) {
-        return iActProcessInstanceService.getCurrentSubmitByPage(processInstanceBo);
+        return actProcessInstanceService.getCurrentSubmitByPage(processInstanceBo);
     }
 
     /**
@@ -135,7 +135,7 @@ public class ActProcessInstanceController extends BaseController {
     @Log(title = "流程实例管理", businessType = BusinessType.INSERT)
     @PostMapping("/taskUrging")
     public R<Void> taskUrging(@RequestBody TaskUrgingBo taskUrgingBo) {
-        return toAjax(iActProcessInstanceService.taskUrging(taskUrgingBo));
+        return toAjax(actProcessInstanceService.taskUrging(taskUrgingBo));
     }
 
 }

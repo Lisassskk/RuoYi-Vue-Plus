@@ -1,8 +1,8 @@
 package org.dromara.workflow.mapper;
 
+import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 import org.dromara.workflow.domain.WfBusinessForm;
 import org.dromara.workflow.domain.vo.WfBusinessFormVo;
-import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
 /**
  * 发起流程Mapper接口

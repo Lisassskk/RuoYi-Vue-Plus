@@ -75,7 +75,7 @@ public class WorkflowUtils {
         if (jsonBytes == null) {
             return new byte[0];
         }
-        //1. json字节码转成 BpmnModel 对象
+        // 1. json字节码转成 BpmnModel 对象
         ObjectMapper objectMapper = JsonUtils.getObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonBytes);
         BpmnModel bpmnModel = new BpmnJsonConverter().convertToBpmnModel(jsonNode);
@@ -83,7 +83,7 @@ public class WorkflowUtils {
         if (bpmnModel.getProcesses().isEmpty()) {
             return new byte[0];
         }
-        //2.将bpmnModel转为xml
+        // 2.将bpmnModel转为xml
         return new BpmnXMLConverter().convertToXML(bpmnModel);
     }
 
@@ -127,32 +127,32 @@ public class WorkflowUtils {
     private static void checkBpmnNode(Collection<FlowElement> flowElements, boolean subtask) throws ServerException {
 
         if (CollUtil.isEmpty(flowElements)) {
-            throw new ServerException(subtask ? "子流程必须存在节点" : "" + "必须存在节点！");
+            throw new ServerException(subtask ? "子流程必须存在节点" : "必须存在节点！");
         }
 
         List<StartEvent> startEventList = flowElements.stream().filter(StartEvent.class::isInstance).map(StartEvent.class::cast).collect(Collectors.toList());
         if (CollUtil.isEmpty(startEventList)) {
-            throw new ServerException(subtask ? "子流程必须存在开始节点" : "" + "必须存在开始节点！");
+            throw new ServerException(subtask ? "子流程必须存在开始节点" : "必须存在开始节点！");
         }
 
         if (startEventList.size() > 1) {
-            throw new ServerException(subtask ? "子流程只能存在一个开始节点" : "" + "只能存在一个开始节点！");
+            throw new ServerException(subtask ? "子流程只能存在一个开始节点" : "只能存在一个开始节点！");
         }
 
         StartEvent startEvent = startEventList.get(0);
         List<SequenceFlow> outgoingFlows = startEvent.getOutgoingFlows();
         if (CollUtil.isEmpty(outgoingFlows)) {
-            throw new ServerException(subtask ? "子流程流程节点为空，请至少设计一条主线流程！" : "" + "流程节点为空，请至少设计一条主线流程！");
+            throw new ServerException(subtask ? "子流程流程节点为空，请至少设计一条主线流程！" : "流程节点为空，请至少设计一条主线流程！");
         }
 
         FlowElement targetFlowElement = outgoingFlows.get(0).getTargetFlowElement();
         if (!(targetFlowElement instanceof UserTask)) {
-            throw new ServerException(subtask ? "子流程开始节点后第一个节点必须是用户任务！" : "" + "开始节点后第一个节点必须是用户任务！");
+            throw new ServerException(subtask ? "子流程开始节点后第一个节点必须是用户任务！" : "开始节点后第一个节点必须是用户任务！");
         }
 
         List<EndEvent> endEventList = flowElements.stream().filter(EndEvent.class::isInstance).map(EndEvent.class::cast).collect(Collectors.toList());
         if (CollUtil.isEmpty(endEventList)) {
-            throw new ServerException(subtask ? "子流程必须存在结束节点！" : "" + "必须存在结束节点！");
+            throw new ServerException(subtask ? "子流程必须存在结束节点！" : "必须存在结束节点！");
         }
     }
 
@@ -298,7 +298,7 @@ public class WorkflowUtils {
             return;
         }
         ProcessInstanceVo processInstanceVo = BeanUtil.toBean(actHiProcinst, ProcessInstanceVo.class);
-        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(processInstanceVo.getBusinessStatus()));
+        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(processInstanceVo.getBusinessStatus()));
         ReflectUtils.invokeSetter(obj, PROCESS_INSTANCE_VO, processInstanceVo);
     }
 
@@ -320,18 +320,18 @@ public class WorkflowUtils {
                 if (CollUtil.isEmpty(actHiProcinstList)) {
                     ProcessInstanceVo processInstanceVo = new ProcessInstanceVo();
                     processInstanceVo.setBusinessStatus(BusinessStatusEnum.DRAFT.getStatus());
-                    processInstanceVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(processInstanceVo.getBusinessStatus()));
+                    processInstanceVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(processInstanceVo.getBusinessStatus()));
                     ReflectUtils.invokeSetter(o, PROCESS_INSTANCE_VO, processInstanceVo);
                 } else {
                     ActHiProcinst actHiProcinst = actHiProcinstList.stream().filter(e -> e.getBusinessKey().equals(fieldValue)).findFirst().orElse(null);
                     if (ObjectUtil.isNotEmpty(actHiProcinst)) {
                         ProcessInstanceVo processInstanceVo = BeanUtil.toBean(actHiProcinst, ProcessInstanceVo.class);
-                        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(processInstanceVo.getBusinessStatus()));
+                        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(processInstanceVo.getBusinessStatus()));
                         ReflectUtils.invokeSetter(o, PROCESS_INSTANCE_VO, processInstanceVo);
                     } else {
                         ProcessInstanceVo processInstanceVo = new ProcessInstanceVo();
                         processInstanceVo.setBusinessStatus(BusinessStatusEnum.DRAFT.getStatus());
-                        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.getEumByStatus(processInstanceVo.getBusinessStatus()));
+                        processInstanceVo.setBusinessStatusName(BusinessStatusEnum.findByStatus(processInstanceVo.getBusinessStatus()));
                         ReflectUtils.invokeSetter(o, PROCESS_INSTANCE_VO, processInstanceVo);
                     }
                 }

@@ -18,7 +18,7 @@ import lombok.Data;
  * @author Joram Barrez
  */
 @Data
-public class GroupRepresentation{
+public class GroupRepresentation {
 
     protected String id;
     protected String name;

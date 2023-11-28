@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.common.core.exception.ServiceException;
+import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.tenant.helper.TenantHelper;
@@ -76,7 +77,7 @@ public class ActModelServiceImpl implements IActModelService {
      * @return 返回分页列表
      */
     @Override
-    public TableDataInfo<Model> getByPage(ModelBo modelBo) {
+    public TableDataInfo<Model> page(ModelBo modelBo) {
         ModelQuery query = repositoryService.createModelQuery();
         query.modelTenantId(TenantHelper.getTenantId());
         if (StringUtils.isNotEmpty(modelBo.getName())) {
@@ -93,8 +94,8 @@ public class ActModelServiceImpl implements IActModelService {
         query.orderByCreateTime().desc();
         // 分页查询
         List<Model> modelList = query.listPage(modelBo.getPageNum(), modelBo.getPageSize());
-        if (CollectionUtil.isNotEmpty(modelList)) {
-            modelList.forEach(e -> {
+        if (CollUtil.isNotEmpty(modelList)) {
+            modelList.parallelStream().forEach(e -> {
                 boolean isNull = JSONUtil.isNull(JSONUtil.parseObj(e.getMetaInfo()).get(ModelDataJsonConstants.MODEL_DESCRIPTION));
                 if (!isNull) {
                     e.setMetaInfo((String) JSONUtil.parseObj(e.getMetaInfo()).get(ModelDataJsonConstants.MODEL_DESCRIPTION));
@@ -237,11 +238,11 @@ public class ActModelServiceImpl implements IActModelService {
             JsonNode childShapes = jsonNode.get("childShapes");
             for (JsonNode childShape : childShapes) {
                 JsonNode properties = childShape.get("properties");
-                if(!properties.path("usertaskassignment").isMissingNode()){
+                if (!properties.path("usertaskassignment").isMissingNode()) {
                     JsonNode usertaskassignment = properties.get("usertaskassignment");
-                    if(!usertaskassignment.path("assignment").isMissingNode()){
+                    if (!usertaskassignment.path("assignment").isMissingNode()) {
                         JsonNode assignment = usertaskassignment.get("assignment");
-                        if(!assignment.path("assignee").isMissingNode()){
+                        if (!assignment.path("assignee").isMissingNode()) {
                             if ("$INITIATOR".equals(assignment.get("assignee").textValue())) {
                                 ((ObjectNode) assignment).put("assignee", "${INITIATOR}");
                             }
@@ -406,16 +407,15 @@ public class ActModelServiceImpl implements IActModelService {
     public ResultListDataRepresentation getGroups(String filter) {
 
         LambdaQueryWrapper<SysRole> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(org.dromara.common.core.utils.StringUtils.isNotBlank(filter), SysRole::getRoleName, filter);
+        wrapper.like(StringUtils.isNotBlank(filter), SysRole::getRoleName, filter);
         List<SysRole> sysRoles = sysRoleMapper.selectList(wrapper);
-        List<GroupRepresentation> result = new ArrayList<>();
-        for (SysRole sysRole : sysRoles) {
+        List<GroupRepresentation> result = StreamUtils.toList(sysRoles, sysRole -> {
             GroupRepresentation groupRepresentation = new GroupRepresentation();
             groupRepresentation.setId(sysRole.getRoleId().toString());
             groupRepresentation.setName(sysRole.getRoleName());
             groupRepresentation.setType(sysRole.getRoleKey());
-            result.add(groupRepresentation);
-        }
+            return groupRepresentation;
+        });
         return new ResultListDataRepresentation(result);
     }
 }

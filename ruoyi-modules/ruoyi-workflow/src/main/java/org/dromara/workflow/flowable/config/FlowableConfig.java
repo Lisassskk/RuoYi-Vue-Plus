@@ -19,6 +19,7 @@ public class FlowableConfig implements EngineConfigurationConfigurer<SpringProce
 
     @Autowired
     private GlobalFlowableListener globalFlowableListener;
+
     @Override
     public void configure(SpringProcessEngineConfiguration processEngineConfiguration) {
         processEngineConfiguration.setIdGenerator(IdWorker::getIdStr);

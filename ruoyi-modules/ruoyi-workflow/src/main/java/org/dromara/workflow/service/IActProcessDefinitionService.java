@@ -19,7 +19,7 @@ public interface IActProcessDefinitionService {
      * @param processDefinitionBo 参数
      * @return 返回分页列表
      */
-    TableDataInfo<ProcessDefinitionVo> getByPage(ProcessDefinitionBo processDefinitionBo);
+    TableDataInfo<ProcessDefinitionVo> page(ProcessDefinitionBo processDefinitionBo);
 
     /**
      * 查询历史流程定义列表

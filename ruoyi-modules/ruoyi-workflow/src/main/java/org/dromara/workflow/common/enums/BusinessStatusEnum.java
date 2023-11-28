@@ -6,6 +6,8 @@ import lombok.Getter;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.core.utils.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * 业务状态枚举
  *
@@ -58,17 +60,15 @@ public enum BusinessStatusEnum {
      *
      * @param status 状态
      */
-    public static String getEumByStatus(String status) {
+    public static String findByStatus(String status) {
         if (StringUtils.isBlank(status)) {
             return StrUtil.EMPTY;
         }
-
-        for (BusinessStatusEnum statusEnum : BusinessStatusEnum.values()) {
-            if (statusEnum.getStatus().equals(status)) {
-                return statusEnum.getDesc();
-            }
-        }
-        return StrUtil.EMPTY;
+        return Arrays.stream(BusinessStatusEnum.values())
+            .filter(statusEnum -> statusEnum.getStatus().equals(status))
+            .findFirst()
+            .map(BusinessStatusEnum::getDesc)
+            .orElse(StrUtil.EMPTY);
     }
 
     /**

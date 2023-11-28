@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * 任务状态枚举
  *
@@ -73,17 +75,16 @@ public enum TaskStatusEnum {
      *
      * @param status 状态
      */
-    public static String getEnumsByStatus(String status) {
+    public static String findByStatus(String status) {
         if (StringUtils.isBlank(status)) {
             return StrUtil.EMPTY;
         }
 
-        for (TaskStatusEnum statusEnum : TaskStatusEnum.values()) {
-            if (statusEnum.getStatus().equals(status)) {
-                return statusEnum.getDesc();
-            }
-        }
-        return StrUtil.EMPTY;
+        return Arrays.stream(TaskStatusEnum.values())
+            .filter(statusEnum -> statusEnum.getStatus().equals(status))
+            .findFirst()
+            .map(TaskStatusEnum::getDesc)
+            .orElse(StrUtil.EMPTY);
     }
 }
 

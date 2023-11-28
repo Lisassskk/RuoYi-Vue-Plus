@@ -17,7 +17,7 @@ import java.util.Date;
 public class ActHistoryInfoVo implements Serializable {
 
     @Serial
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
     /**
      * 任务id
      */

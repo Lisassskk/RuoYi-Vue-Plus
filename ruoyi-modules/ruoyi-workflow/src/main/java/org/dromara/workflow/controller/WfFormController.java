@@ -67,6 +67,7 @@ public class WfFormController extends BaseController {
 
     /**
      * 获取流程表单详细信息
+     *
      * @param formId 主键
      */
     @SaCheckPermission("workflow:form:query")
@@ -97,6 +98,7 @@ public class WfFormController extends BaseController {
 
     /**
      * 删除流程表单
+     *
      * @param formIds 主键串
      */
     @SaCheckPermission("workflow:form:remove")

@@ -2,7 +2,9 @@ package org.dromara.workflow.flowable.config;
 
 import cn.hutool.core.collection.CollUtil;
 import org.dromara.workflow.common.enums.TaskStatusEnum;
-import org.flowable.bpmn.model.*;
+import org.flowable.bpmn.model.BoundaryEvent;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
 import org.flowable.common.engine.api.delegate.event.*;
 import org.flowable.common.engine.impl.cfg.TransactionState;
 import org.flowable.engine.RepositoryService;
@@ -43,11 +45,7 @@ public class GlobalFlowableListener implements FlowableEventListener {
         if (flowableEvent instanceof FlowableEngineEvent flowableEngineEvent) {
             FlowableEngineEventType engineEventType = (FlowableEngineEventType) flowableEvent.getType();
             switch (engineEventType) {
-                case JOB_EXECUTION_SUCCESS:
-                    jobExecutionSuccess((FlowableEngineEntityEvent) flowableEngineEvent);
-                    break;
-                default:
-                    break;
+                case JOB_EXECUTION_SUCCESS -> jobExecutionSuccess((FlowableEngineEntityEvent) flowableEngineEvent);
             }
         }
     }

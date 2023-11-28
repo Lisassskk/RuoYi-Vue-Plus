@@ -1,8 +1,8 @@
 package org.dromara.workflow.service;
 
 import org.dromara.workflow.domain.WfCategory;
-import org.dromara.workflow.domain.vo.WfCategoryVo;
 import org.dromara.workflow.domain.bo.WfCategoryBo;
+import org.dromara.workflow.domain.vo.WfCategoryVo;
 
 import java.util.Collection;
 import java.util.List;

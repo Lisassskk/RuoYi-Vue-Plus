@@ -1,36 +1,35 @@
 package org.dromara.workflow.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.utils.DateUtils;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.json.utils.JsonUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.workflow.domain.ActHiProcinst;
+import org.dromara.workflow.domain.WfBusinessForm;
 import org.dromara.workflow.domain.WfFormDefinition;
+import org.dromara.workflow.domain.bo.WfBusinessFormBo;
+import org.dromara.workflow.domain.vo.WfBusinessFormVo;
 import org.dromara.workflow.domain.vo.WfFormDefinitionVo;
+import org.dromara.workflow.mapper.WfBusinessFormMapper;
 import org.dromara.workflow.mapper.WfFormDefinitionMapper;
 import org.dromara.workflow.service.IActHiProcinstService;
 import org.dromara.workflow.service.IActProcessInstanceService;
+import org.dromara.workflow.service.IWfBusinessFormService;
 import org.dromara.workflow.utils.WorkflowUtils;
 import org.springframework.stereotype.Service;
-import org.dromara.workflow.domain.bo.WfBusinessFormBo;
-import org.dromara.workflow.domain.vo.WfBusinessFormVo;
-import org.dromara.workflow.domain.WfBusinessForm;
-import org.dromara.workflow.mapper.WfBusinessFormMapper;
-import org.dromara.workflow.service.IWfBusinessFormService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
@@ -45,8 +44,8 @@ public class WfBusinessFormServiceImpl implements IWfBusinessFormService {
 
     private final WfBusinessFormMapper baseMapper;
     private final WfFormDefinitionMapper wfFormDefinitionMapper;
-    private final IActProcessInstanceService iActProcessInstanceService;
-    private final IActHiProcinstService iActHiProcinstService;
+    private final IActProcessInstanceService actProcessInstanceService;
+    private final IActHiProcinstService actHiProcinstService;
 
     /**
      * 查询发起流程
@@ -104,8 +103,7 @@ public class WfBusinessFormServiceImpl implements IWfBusinessFormService {
             bo.setId(add.getId());
         }
         if (StringUtils.isNotBlank(add.getContentValue())) {
-            Map<String, Object> variable = JsonUtils.parseObject(add.getContentValue(), new TypeReference<>() {
-            });
+            Map<String, Object> variable = JsonUtils.parseMap(add.getContentValue());
             add.setVariable(variable);
         }
         return add;
@@ -119,8 +117,7 @@ public class WfBusinessFormServiceImpl implements IWfBusinessFormService {
         WfBusinessForm update = MapstructUtils.convert(bo, WfBusinessForm.class);
         baseMapper.updateById(update);
         if (StringUtils.isNotBlank(update.getContentValue())) {
-            Map<String, Object> variable = JsonUtils.parseObject(update.getContentValue(), new TypeReference<>() {
-            });
+            Map<String, Object> variable = JsonUtils.parseMap(update.getContentValue());
             update.setVariable(variable);
         }
         return update;
@@ -132,9 +129,9 @@ public class WfBusinessFormServiceImpl implements IWfBusinessFormService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids) {
-        List<ActHiProcinst> actHiProcinsts = iActHiProcinstService.selectByBusinessKeyIn(StreamUtils.toList(ids, String::valueOf));
+        List<ActHiProcinst> actHiProcinsts = actHiProcinstService.selectByBusinessKeyIn(StreamUtils.toList(ids, String::valueOf));
         if (CollUtil.isNotEmpty(actHiProcinsts)) {
-            iActProcessInstanceService.deleteRuntimeProcessAndHisInst(actHiProcinsts.stream().map(ActHiProcinst::getId).collect(Collectors.toList()));
+            actProcessInstanceService.deleteRuntimeProcessAndHisInst(actHiProcinsts.stream().map(ActHiProcinst::getId).collect(Collectors.toList()));
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }

@@ -1,24 +1,24 @@
 package org.dromara.workflow.service.impl;
 
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.workflow.domain.WfFormDefinition;
 import org.dromara.workflow.domain.bo.WfFormDefinitionBo;
 import org.dromara.workflow.domain.vo.WfFormDefinitionVo;
-import org.dromara.workflow.domain.WfFormDefinition;
 import org.dromara.workflow.mapper.WfFormDefinitionMapper;
 import org.dromara.workflow.service.IWfFormDefinitionService;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 动态单与流程定义关联信息Service业务层处理
@@ -36,7 +36,7 @@ public class WfFormDefinitionServiceImpl implements IWfFormDefinitionService {
      * 查询动态单与流程定义关联信息
      */
     @Override
-    public WfFormDefinitionVo queryById(Long id){
+    public WfFormDefinitionVo queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -98,9 +98,9 @@ public class WfFormDefinitionServiceImpl implements IWfFormDefinitionService {
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(WfFormDefinition entity){
+    private void validEntityBeforeSave(WfFormDefinition entity) {
         LambdaQueryWrapper<WfFormDefinition> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(WfFormDefinition::getFormId,entity.getFormId());
+        wrapper.eq(WfFormDefinition::getFormId, entity.getFormId());
         baseMapper.delete(wrapper);
     }
 
@@ -109,7 +109,7 @@ public class WfFormDefinitionServiceImpl implements IWfFormDefinitionService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;

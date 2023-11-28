@@ -1,14 +1,13 @@
 package org.dromara.workflow.domain.vo;
 
-import org.dromara.workflow.domain.WfCategory;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
+import org.dromara.workflow.domain.WfCategory;
 
 import java.io.Serial;
 import java.io.Serializable;
-
 
 
 /**

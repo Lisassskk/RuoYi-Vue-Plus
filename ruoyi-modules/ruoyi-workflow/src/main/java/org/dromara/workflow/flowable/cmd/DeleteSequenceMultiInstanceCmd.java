@@ -1,5 +1,6 @@
 package org.dromara.workflow.flowable.cmd;
 
+import lombok.AllArgsConstructor;
 import org.flowable.common.engine.impl.interceptor.Command;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
@@ -20,6 +21,7 @@ import static org.dromara.workflow.common.constant.FlowConstant.NUMBER_OF_INSTAN
  *
  * @author may
  */
+@AllArgsConstructor
 public class DeleteSequenceMultiInstanceCmd implements Command<Void> {
 
     /**
@@ -42,19 +44,14 @@ public class DeleteSequenceMultiInstanceCmd implements Command<Void> {
      */
     private final List<Long> assignees;
 
-    public DeleteSequenceMultiInstanceCmd(String currentUserId, String executionId, String assigneeList, List<Long> assignees) {
-        this.currentUserId = currentUserId;
-        this.executionId = executionId;
-        this.assigneeList = assigneeList;
-        this.assignees = assignees;
-    }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Void execute(CommandContext commandContext) {
         ExecutionEntityManager executionEntityManager = CommandContextUtil.getExecutionEntityManager();
         ExecutionEntity entity = executionEntityManager.findById(executionId);
         // 设置流程变量
-        List<Long> userIds = (List) entity.getVariable(assigneeList);
+        List<Long> userIds = (List<Long>) entity.getVariable(assigneeList);
         List<Long> userIdList = new ArrayList<>();
         userIds.forEach(e -> {
             Long userId = assignees.stream().filter(id -> id.equals(e)).findFirst().orElse(null);
@@ -62,7 +59,7 @@ public class DeleteSequenceMultiInstanceCmd implements Command<Void> {
                 userIdList.add(e);
             }
         });
-        //当前任务执行位置
+        // 当前任务执行位置
         int loopCounterIndex = -1;
         for (int i = 0; i < userIdList.size(); i++) {
             Long userId = userIdList.get(i);

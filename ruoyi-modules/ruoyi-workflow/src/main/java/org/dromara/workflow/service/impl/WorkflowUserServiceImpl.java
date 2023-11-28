@@ -58,6 +58,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
      * @param sysUserMultiBo 参数
      */
     @Override
+    @SuppressWarnings("unchecked")
     public TableDataInfo<SysUserVo> getWorkflowAddMultiInstanceByPage(SysUserMultiBo sysUserMultiBo) {
         Task task = taskService.createTaskQuery().taskId(sysUserMultiBo.getTaskId()).singleResult();
         if (task == null) {
@@ -72,7 +73,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
         queryWrapper.eq(StringUtils.isNotEmpty(sysUserMultiBo.getDeptId()), SysUser::getDeptId, sysUserMultiBo.getDeptId());
         queryWrapper.eq(SysUser::getStatus, UserStatus.OK.getCode());
         if (multiInstance.getType() instanceof SequentialMultiInstanceBehavior) {
-            List<Long> assigneeList = (List) runtimeService.getVariable(task.getExecutionId(), multiInstance.getAssigneeList());
+            List<Long> assigneeList = (List<Long>) runtimeService.getVariable(task.getExecutionId(), multiInstance.getAssigneeList());
             queryWrapper.notIn(CollectionUtil.isNotEmpty(assigneeList), SysUser::getUserId, assigneeList);
         } else {
             List<Task> list = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
@@ -92,6 +93,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
      * @param taskId 任务id 任务id
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<TaskVo> getWorkflowDeleteMultiInstanceList(String taskId) {
         Task task = taskService.createTaskQuery().taskTenantId(TenantHelper.getTenantId()).taskId(taskId).singleResult();
         List<Task> taskList = taskService.createTaskQuery().taskTenantId(TenantHelper.getTenantId()).processInstanceId(task.getProcessInstanceId()).list();
@@ -161,11 +163,11 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
      */
     private Page<SysUserVo> recordPage(Page<SysUserVo> page) {
         List<SysUserVo> records = page.getRecords();
-        if (CollectionUtil.isEmpty(records)) {
+        if (CollUtil.isEmpty(records)) {
             return page;
         }
-        List<Long> collectDeptId = records.stream().map(SysUserVo::getDeptId).filter(Objects::nonNull).collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(collectDeptId)) {
+        List<Long> collectDeptId = StreamUtils.toList(records, SysUserVo::getDeptId);
+        if (CollUtil.isEmpty(collectDeptId)) {
             return page;
         }
         List<SysDeptVo> sysDeptList = sysDeptMapper.selectVoBatchIds(collectDeptId);
@@ -187,7 +189,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
             return Collections.emptyList();
         }
         LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery();
-        //检索条件
+        // 检索条件
         queryWrapper.eq(SysUser::getStatus, UserStatus.OK.getCode());
         queryWrapper.in(SysUser::getUserId, userIds);
         List<SysUserVo> sysUserVos = sysUserMapper.selectVoList(queryWrapper);

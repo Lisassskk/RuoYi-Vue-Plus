@@ -1,11 +1,13 @@
 package org.dromara.workflow.controller;
 
+import cn.hutool.core.convert.Convert;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
+import org.dromara.common.core.domain.model.LoginUser;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.idempotent.annotation.RepeatSubmit;
 import org.dromara.common.json.utils.JsonUtils;
@@ -25,7 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 /**
  * 模型管理 控制层
@@ -40,7 +42,7 @@ public class ActModelController extends BaseController {
 
     private final RepositoryService repositoryService;
 
-    private final IActModelService iActModelService;
+    private final IActModelService actModelService;
 
 
     /**
@@ -49,8 +51,8 @@ public class ActModelController extends BaseController {
      * @param modelBo 模型参数
      */
     @GetMapping("/list")
-    public TableDataInfo<Model> getByPage(ModelBo modelBo) {
-        return iActModelService.getByPage(modelBo);
+    public TableDataInfo<Model> page(ModelBo modelBo) {
+        return actModelService.page(modelBo);
     }
 
     /**
@@ -59,10 +61,11 @@ public class ActModelController extends BaseController {
     @GetMapping("/rest/account")
     public String getAccount() {
         AccountVo accountVo = new AccountVo();
-        accountVo.setId(Objects.requireNonNull(LoginHelper.getUserId()).toString());
+        LoginUser loginUser = LoginHelper.getLoginUser();
+        accountVo.setId(Convert.toStr(loginUser.getUserId()));
         accountVo.setFirstName("");
-        accountVo.setLastName(LoginHelper.getUsername());
-        accountVo.setFullName(LoginHelper.getUsername());
+        accountVo.setLastName(loginUser.getUsername());
+        accountVo.setFullName(loginUser.getUsername());
         return JsonUtils.toJsonString(accountVo);
     }
 
@@ -75,7 +78,7 @@ public class ActModelController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/rest/models")
     public R<Void> saveNewModel(@Validated(AddGroup.class) @RequestBody ModelBo modelBo) {
-        return toAjax(iActModelService.saveNewModel(modelBo));
+        return toAjax(actModelService.saveNewModel(modelBo));
     }
 
     /**
@@ -85,7 +88,7 @@ public class ActModelController extends BaseController {
      */
     @GetMapping("/rest/models/{modelId}/editor/json")
     public ObjectNode getModelInfo(@NotBlank(message = "模型id不能为空") @PathVariable String modelId) {
-        return iActModelService.getModelInfo(modelId);
+        return actModelService.getModelInfo(modelId);
     }
 
 
@@ -99,7 +102,7 @@ public class ActModelController extends BaseController {
     @RepeatSubmit()
     @PostMapping(value = "/rest/models/{modelId}/editor/json")
     public R<Void> editModel(@PathVariable String modelId, @RequestParam MultiValueMap<String, String> values) {
-        return toAjax(iActModelService.editModel(modelId, values));
+        return toAjax(actModelService.editModel(modelId, values));
     }
 
     /**
@@ -112,9 +115,7 @@ public class ActModelController extends BaseController {
     @DeleteMapping("/{ids}")
     @Transactional(rollbackFor = Exception.class)
     public R<Void> delete(@NotEmpty(message = "主键不能为空") @PathVariable String[] ids) {
-        for (String id : ids) {
-            repositoryService.deleteModel(id);
-        }
+        Arrays.stream(ids).parallel().forEachOrdered(repositoryService::deleteModel);
         return R.ok();
     }
 
@@ -127,7 +128,7 @@ public class ActModelController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/modelDeploy/{id}")
     public R<Void> deploy(@NotBlank(message = "模型id不能为空") @PathVariable("id") String id) {
-        return toAjax(iActModelService.modelDeploy(id));
+        return toAjax(actModelService.modelDeploy(id));
     }
 
     /**
@@ -139,7 +140,7 @@ public class ActModelController extends BaseController {
     @GetMapping("/export/zip/{modelId}")
     public void exportZip(@NotEmpty(message = "模型id不能为空") @PathVariable String modelId,
                           HttpServletResponse response) {
-        iActModelService.exportZip(modelId, response);
+        actModelService.exportZip(modelId, response);
     }
 
     /**
@@ -148,8 +149,8 @@ public class ActModelController extends BaseController {
      * @param filter 参数
      */
     @GetMapping(value = "/rest/editor-users")
-    public ResultListDataRepresentation getUsers(@RequestParam(value = "filter", required = false) String filter) {
-        return iActModelService.getUsers(filter);
+    public ResultListDataRepresentation editorUsers(@RequestParam(value = "filter", required = false) String filter) {
+        return actModelService.getUsers(filter);
     }
 
     /**
@@ -158,8 +159,8 @@ public class ActModelController extends BaseController {
      * @param filter 参数
      */
     @GetMapping(value = "/rest/editor-groups")
-    public ResultListDataRepresentation getGroups(@RequestParam(required = false, value = "filter") String filter) {
-        return iActModelService.getGroups(filter);
+    public ResultListDataRepresentation editorGroups(@RequestParam(required = false, value = "filter") String filter) {
+        return actModelService.getGroups(filter);
     }
 
 }
