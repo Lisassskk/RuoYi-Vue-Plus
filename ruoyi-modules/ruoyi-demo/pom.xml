@@ -65,11 +65,6 @@
 
         <dependency>
             <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-web</artifactId>
         </dependency>
 
@@ -102,11 +97,6 @@
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-websocket</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-workflow</artifactId>
-        </dependency>
         <!-- 短信 用哪个导入哪个依赖 -->
         <!--        <dependency>-->
         <!--            <groupId>com.aliyun</groupId>-->
@@ -117,6 +107,7 @@
         <!--            <groupId>com.tencentcloudapi</groupId>-->
         <!--            <artifactId>tencentcloud-sdk-java-sms</artifactId>-->
         <!--        </dependency>-->
+
     </dependencies>
 
 </project>

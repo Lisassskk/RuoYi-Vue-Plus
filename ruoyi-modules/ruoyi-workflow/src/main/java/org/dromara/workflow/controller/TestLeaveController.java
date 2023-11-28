@@ -1,4 +1,4 @@
-package org.dromara.demo.controller;
+package org.dromara.workflow.controller;
 
 import java.util.List;
 
@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.dromara.demo.domain.TestLeave;
+import org.dromara.workflow.domain.TestLeave;
+import org.dromara.workflow.domain.bo.TestLeaveBo;
+import org.dromara.workflow.domain.vo.TestLeaveVo;
+import org.dromara.workflow.service.ITestLeaveService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import org.dromara.common.idempotent.annotation.RepeatSubmit;
@@ -18,9 +21,6 @@ import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
-import org.dromara.demo.domain.vo.TestLeaveVo;
-import org.dromara.demo.domain.bo.TestLeaveBo;
-import org.dromara.demo.service.ITestLeaveService;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 
 /**

@@ -1,6 +1,6 @@
-package org.dromara.demo.domain.bo;
+package org.dromara.workflow.domain.bo;
 
-import org.dromara.demo.domain.TestLeave;
+import org.dromara.workflow.domain.TestLeave;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;

@@ -1,7 +1,7 @@
-package org.dromara.demo.mapper;
+package org.dromara.workflow.mapper;
 
-import org.dromara.demo.domain.TestLeave;
-import org.dromara.demo.domain.vo.TestLeaveVo;
+import org.dromara.workflow.domain.TestLeave;
+import org.dromara.workflow.domain.vo.TestLeaveVo;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
 /**

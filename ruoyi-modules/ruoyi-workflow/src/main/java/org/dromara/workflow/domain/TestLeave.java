@@ -1,4 +1,4 @@
-package org.dromara.demo.domain;
+package org.dromara.workflow.domain;
 
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
