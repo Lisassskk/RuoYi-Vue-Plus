@@ -1,11 +1,13 @@
 package org.dromara.workflow.controller;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.domain.model.LoginUser;
 import org.dromara.common.core.validate.AddGroup;
@@ -27,6 +29,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -163,4 +167,15 @@ public class ActModelController extends BaseController {
         return actModelService.getGroups(filter);
     }
 
+    /**
+     * 解析翻译模型设计器内容
+     */
+    @GetMapping(value = "/rest/stencil-sets/editor")
+    public String getStencilset() {
+        try (InputStream inputStream = ResourceUtil.getStream("static/stencilset.json")) {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new SecurityException("Error while loading stencil set", e);
+        }
+    }
 }
