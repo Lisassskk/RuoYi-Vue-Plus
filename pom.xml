@@ -113,6 +113,14 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-bom</artifactId>
+                <version>${flowable.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- JustAuth 的依赖配置-->
             <dependency>
                 <groupId>me.zhyd.oauth</groupId>
@@ -310,20 +318,6 @@
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>
                 <version>${ip2region.version}</version>
-            </dependency>
-
-            <!--引入flowable依赖-->
-            <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-spring-boot-starter</artifactId>
-                <version>${flowable.version}</version>
-            </dependency>
-
-            <!-- 绘制flowable流程图 -->
-            <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-image-generator</artifactId>
-                <version>${flowable.version}</version>
             </dependency>
 
             <dependency>
