@@ -375,10 +375,6 @@
                         <groupId>org.flowable</groupId>
                     </exclusion>
                     <exclusion>
-                        <artifactId>flowable-spring-boot-starter-actuator</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
                         <artifactId>flowable-spring-security</artifactId>
                         <groupId>org.flowable</groupId>
                     </exclusion>
