@@ -317,68 +317,6 @@
                 <groupId>org.flowable</groupId>
                 <artifactId>flowable-spring-boot-starter</artifactId>
                 <version>${flowable.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-dmn-spring-configurator</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-form-spring-configurator</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-idm-spring-configurator</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-cmmn-spring-configurator</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-cmmn</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-app</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-dmn</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-rest</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-rest-api</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-ui-idm</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-ui-admin</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-ui-modeler</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-boot-starter-ui-task</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>flowable-spring-security</artifactId>
-                        <groupId>org.flowable</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!-- 绘制flowable流程图 -->
