@@ -50,7 +50,7 @@ import java.rmi.ServerException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.dromara.workflow.common.constant.FlowConstant.PROCESS_INSTANCE_VO;
+import static org.dromara.workflow.common.constant.FlowConstant.*;
 
 /**
  * 工作流工具
@@ -82,6 +82,13 @@ public class WorkflowUtils {
 
         if (bpmnModel.getProcesses().isEmpty()) {
             return new byte[0];
+        }
+        //解决设计器选择设置流程发起人设置变量有问题
+        Collection<FlowElement> flowElements = bpmnModel.getMainProcess().getFlowElements();
+        for (FlowElement flowElement : flowElements) {
+            if (flowElement instanceof UserTask && INITIATOR_SET.equals(((UserTask) flowElement).getAssignee())) {
+                ((UserTask) flowElement).setAssignee(INITIATOR_SET_UPDATE);
+            }
         }
         // 2.将bpmnModel转为xml
         return new BpmnXMLConverter().convertToXML(bpmnModel);

@@ -1,7 +1,6 @@
 package org.dromara.workflow.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -235,21 +234,6 @@ public class ActModelServiceImpl implements IActModelService {
             repositoryService.saveModel(model);
             //解决设计器选择设置流程发起人设置变量有问题
             JsonNode jsonNode = objectMapper.readTree(values.getFirst("json_xml"));
-            JsonNode childShapes = jsonNode.get("childShapes");
-            for (JsonNode childShape : childShapes) {
-                JsonNode properties = childShape.get("properties");
-                if (!properties.path("usertaskassignment").isMissingNode()) {
-                    JsonNode usertaskassignment = properties.get("usertaskassignment");
-                    if (!usertaskassignment.path("assignment").isMissingNode()) {
-                        JsonNode assignment = usertaskassignment.get("assignment");
-                        if (!assignment.path("assignee").isMissingNode()) {
-                            if ("$INITIATOR".equals(assignment.get("assignee").textValue())) {
-                                ((ObjectNode) assignment).put("assignee", "${INITIATOR}");
-                            }
-                        }
-                    }
-                }
-            }
             byte[] xmlBytes = WorkflowUtils.bpmnJsonToXmlBytes(Objects.requireNonNull(JsonUtils.toJsonString(jsonNode)).getBytes(StandardCharsets.UTF_8));
             if (ArrayUtil.isEmpty(xmlBytes)) {
                 throw new ServiceException("模型不能为空！");

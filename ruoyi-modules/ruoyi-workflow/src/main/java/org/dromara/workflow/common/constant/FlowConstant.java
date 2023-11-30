@@ -65,6 +65,16 @@ public interface FlowConstant {
     String INITIATOR = "INITIATOR";
 
     /**
+     * 设计器中节点设置流程发起人
+     */
+    String INITIATOR_SET = "$INITIATOR";
+
+    /**
+     * 修改设计器设置的变量错误内容
+     */
+    String INITIATOR_SET_UPDATE = "${INITIATOR}";
+
+    /**
      * 开启跳过表达式变量
      */
     String FLOWABLE_SKIP_EXPRESSION_ENABLED = "_FLOWABLE_SKIP_EXPRESSION_ENABLED";
