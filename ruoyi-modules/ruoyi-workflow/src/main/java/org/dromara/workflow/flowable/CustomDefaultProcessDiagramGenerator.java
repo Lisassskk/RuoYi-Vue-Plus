@@ -184,9 +184,7 @@ public class CustomDefaultProcessDiagramGenerator implements ProcessDiagramGener
                 ServiceTask serviceTask = (ServiceTask) flowNode;
                 if ("camel".equalsIgnoreCase(serviceTask.getType())) {
                     processDiagramCanvas.drawCamelTask(serviceTask.getName(), graphicInfo, scaleFactor);
-                } else if ("mule".equalsIgnoreCase(serviceTask.getType())) {
-                    processDiagramCanvas.drawMuleTask(serviceTask.getName(), graphicInfo, scaleFactor);
-                } else if (ServiceTask.HTTP_TASK.equalsIgnoreCase(serviceTask.getType())) {
+                }else if (ServiceTask.HTTP_TASK.equalsIgnoreCase(serviceTask.getType())) {
                     processDiagramCanvas.drawHttpTask(serviceTask.getName(), graphicInfo, scaleFactor);
                 } else if (ServiceTask.DMN_TASK.equalsIgnoreCase(serviceTask.getType())) {
                     processDiagramCanvas.drawDMNTask(serviceTask.getName(), graphicInfo, scaleFactor);
