@@ -270,8 +270,6 @@ insert into sys_menu values('6', '租户管理', '0', '2', 'tenant',           n
 insert into sys_menu values('2', '系统监控', '0', '3', 'monitor',          null, '', 1, 0, 'M', '0', '0', '', 'monitor',  103, 1, sysdate(), null, null, '系统监控目录');
 insert into sys_menu values('3', '系统工具', '0', '4', 'tool',             null, '', 1, 0, 'M', '0', '0', '', 'tool',     103, 1, sysdate(), null, null, '系统工具目录');
 insert into sys_menu values('4', 'PLUS官网', '0', '5', 'https://gitee.com/dromara/RuoYi-Vue-Plus', null, '', 0, 0, 'M', '0', '0', '', 'guide',    103, 1, sysdate(), null, null, 'RuoYi-Vue-Plus官网地址');
-insert into sys_menu values('1616', '工作流','0', '6', 'workflow', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'tree-table', 103, 1, sysdate(), null, null, '工作流目录');
-
 -- 二级菜单
 insert into sys_menu values('100',  '用户管理',     '1',   '1', 'user',             'system/user/index',            '', 1, 0, 'C', '0', '0', 'system:user:list',            'user',          103, 1, sysdate(), null, null, '用户管理菜单');
 insert into sys_menu values('101',  '角色管理',     '1',   '2', 'role',             'system/role/index',            '', 1, 0, 'C', '0', '0', 'system:role:list',            'peoples',       103, 1, sysdate(), null, null, '角色管理菜单');
@@ -286,17 +284,9 @@ insert into sys_menu values('109',  '在线用户',     '2',   '1', 'online',   
 insert into sys_menu values('113',  '缓存监控',     '2',   '5', 'cache',            'monitor/cache/index',          '', 1, 0, 'C', '0', '0', 'monitor:cache:list',          'redis',         103, 1, sysdate(), null, null, '缓存监控菜单');
 insert into sys_menu values('114',  '表单构建',     '3',   '1', 'build',            'tool/build/index',             '', 1, 0, 'C', '0', '0', 'tool:build:list',             'build',         103, 1, sysdate(), null, null, '表单构建菜单');
 insert into sys_menu values('115',  '代码生成',     '3',   '2', 'gen',              'tool/gen/index',               '', 1, 0, 'C', '0', '0', 'tool:gen:list',               'code',          103, 1, sysdate(), null, null, '代码生成菜单');
-insert into sys_menu values('121', '租户管理',     '6',   '1', 'tenant',            'system/tenant/index',          '', 1, 0, 'C', '0', '0', 'system:tenant:list',          'list',          103, 1, sysdate(), null, null, '租户管理菜单');
-insert into sys_menu values('122', '租户套餐管理',  '6',   '2', 'tenantPackage',     'system/tenantPackage/index',   '', 1, 0, 'C', '0', '0', 'system:tenantPackage:list',   'form',          103, 1, sysdate(), null, null, '租户套餐管理菜单');
+insert into sys_menu values('121',  '租户管理',     '6',   '1', 'tenant',           'system/tenant/index',          '', 1, 0, 'C', '0', '0', 'system:tenant:list',          'list',          103, 1, sysdate(), null, null, '租户管理菜单');
+insert into sys_menu values('122',  '租户套餐管理', '6',   '2', 'tenantPackage',    'system/tenantPackage/index',   '', 1, 0, 'C', '0', '0', 'system:tenantPackage:list',   'form',          103, 1, sysdate(), null, null, '租户套餐管理菜单');
 insert into sys_menu values('123',  '客户端管理',   '1',   '11', 'client',           'system/client/index',          '', 1, 0, 'C', '0', '0', 'system:client:list',          'international', 103, 1, sysdate(), null, null, '客户端管理菜单');
-insert into sys_menu values('1622', '流程分类', '1616',   '1', 'category',          'workflow/category/index',     '', 1, 0, 'C', '0', '0', 'workflow:category:list',       'tree-table',    103, 1, sysdate(), null, null, '流程分类菜单');
-insert into sys_menu values('1617', '模型管理', '1616',   '2', 'model',             'workflow/model/index',         '', 1, 1, 'C', '0', '0', 'workflow:model:list',         'tree-table',    103, 1, sysdate(), null, null, '模型管理菜单');
-insert into sys_menu values('1620', '流程定义', '1616',   '3', 'processDefinition', 'workflow/processDefinition/index', '', 1, 1, 'C', '0', '0', '',                        'tree-table',    103, 1, sysdate(), null, null, '流程定义菜单');
-insert into sys_menu values('1630', '流程监控', '1616',   '4', 'monitor',           '',                            '', 1, 0, 'M', '0', '0', '',                             'tree-table',    103, 1, sysdate(), null, null, '流程监控菜单');
-insert into sys_menu values('1618', '我的待办', '1616',   '5', 'task',              '',                             '', 1, 0, 'M', '0', '0', '',                            'tree-table',    103, 1, sysdate(), null, null, '我的待办菜单');
-insert into sys_menu values('1628', '动态表单', '1616',   '6', 'form',              'workflow/form/index',         '', 1, 1, 'C', '0', '0', '',                             'tree-table',    103, 1, sysdate(), null, null, '动态表单菜单');
-insert into sys_menu values('1638', '发起流程', '1616',   '7', 'businessForm',      'workflow/businessForm/index', '', 1, 1, 'C', '0', '0', 'workflow:businessForm:list',   'tree-table',    103, 1, sysdate(), null, null, '发起流程菜单');
-insert into sys_menu values('1639', '我的单据', '1616',   '8', 'businessFormList',  'workflow/businessForm/list',  '', 1, 1, 'C', '0', '0', 'workflow:businessForm:list',   'tree-table',    103, 1, sysdate(), null, null, '我的单据菜单');
 
 -- springboot-admin监控
 insert into sys_menu values('117',  'Admin监控',   '2',   '5',  'Admin',            'monitor/admin/index',         '', 1, 0, 'C', '0', '0', 'monitor:admin:list',           'dashboard',     103, 1, sysdate(), null, null, 'Admin监控菜单');
@@ -306,12 +296,8 @@ insert into sys_menu values('118',  '文件管理',     '1',   '10', 'oss',     
 insert into sys_menu values('120',  '任务调度中心',  '2',   '5',  'powerjob',           'monitor/powerjob/index',        '', 1, 0, 'C', '0', '0', 'monitor:powerjob:list',          'job',           103, 1, sysdate(), null, null, 'PowerJob控制台菜单');
 
 -- 三级菜单
-insert into sys_menu values('500',  '操作日志', '108', '1', 'operlog',           'monitor/operlog/index',          '', 1, 0, 'C', '0', '0', 'monitor:operlog:list',    'form',          103, 1, sysdate(), null, null, '操作日志菜单');
-insert into sys_menu values('501',  '登录日志', '108', '2', 'logininfor',        'monitor/logininfor/index',       '', 1, 0, 'C', '0', '0', 'monitor:logininfor:list', 'logininfor',    103, 1, sysdate(), null, null, '登录日志菜单');
-insert into sys_menu values('1621', '流程实例', '1630','1', 'processInstance',   'workflow/processInstance/index', '', 1, 1, 'C', '0', '0', '',                        'tree-table',    103, 1, sysdate(), null, null, '流程实例');
-insert into sys_menu values('1631', '待办任务', '1630','2', 'allTaskWaiting',    'workflow/task/allTaskWaiting',   '', 1, 1, 'C', '0', '0', '',                        'tree-table',    103, 1, sysdate(), null, null, '待办任务');
-insert into sys_menu values('1619', '待办任务', '1618','2', 'taskWaiting',       'workflow/task/index',            '', 1, 1, 'C', '0', '0', '',                        'tree-table',    103, 1, sysdate(), null, null, '待办任务');
-insert into sys_menu values('1629', '我的单据', '1618','1', 'myDocument',        'workflow/task/myDocument',       '', 1, 1, 'C', '0', '0', '',                        'tree-table',    103, 1, sysdate(), null, null, '我的单据');
+insert into sys_menu values('500',  '操作日志', '108', '1', 'operlog',    'monitor/operlog/index',    '', 1, 0, 'C', '0', '0', 'monitor:operlog:list',    'form',          103, 1, sysdate(), null, null, '操作日志菜单');
+insert into sys_menu values('501',  '登录日志', '108', '2', 'logininfor', 'monitor/logininfor/index', '', 1, 0, 'C', '0', '0', 'monitor:logininfor:list', 'logininfor',    103, 1, sysdate(), null, null, '登录日志菜单');
 -- 用户管理按钮
 insert into sys_menu values('1001', '用户查询', '100', '1',  '', '', '', 1, 0, 'F', '0', '0', 'system:user:query',          '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values('1002', '用户新增', '100', '2',  '', '', '', 1, 0, 'F', '0', '0', 'system:user:add',            '#', 103, 1, sysdate(), null, null, '');
@@ -398,30 +384,12 @@ insert into sys_menu values ('1612', '租户套餐新增', '122', '2', '#', '', 
 insert into sys_menu values ('1613', '租户套餐修改', '122', '3', '#', '', '', 1, 0, 'F', '0', '0', 'system:tenantPackage:edit',    '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values ('1614', '租户套餐删除', '122', '4', '#', '', '', 1, 0, 'F', '0', '0', 'system:tenantPackage:remove',  '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values ('1615', '租户套餐导出', '122', '5', '#', '', '', 1, 0, 'F', '0', '0', 'system:tenantPackage:export',  '#', 103, 1, sysdate(), null, null, '');
--- 动态表单管理相关按钮
-insert into sys_menu values ('1633', '动态表单查询', '1628', '1', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:form:query', '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1634', '动态表单新增', '1628', '2', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:form:add',   '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1635', '动态表单修改', '1628', '3', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:form:edit',  '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1636', '动态表单删除', '1628', '4', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:form:remove','#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1637', '动态表单导出', '1628', '5', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:form:export','#', 103, 1, sysdate(), null, null, '');
--- 流程分类管理相关按钮
-insert into sys_menu values ('1623', '流程分类查询', '1622', '1', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:category:query', '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1624', '流程分类新增', '1622', '2', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:category:add',   '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1625', '流程分类修改', '1622', '3', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:category:edit',  '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1626', '流程分类删除', '1622', '4', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:category:remove','#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values ('1627', '流程分类导出', '1622', '5', '#', '', '', 1, 0, 'F', '0', '0', 'workflow:category:export','#', 103, 1, sysdate(), null, null, '');
 -- 客户端管理按钮
 insert into sys_menu values('1061', '客户端管理查询', '123', '1',  '#', '', '', 1, 0, 'F', '0', '0', 'system:client:query',        '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values('1062', '客户端管理新增', '123', '2',  '#', '', '', 1, 0, 'F', '0', '0', 'system:client:add',          '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values('1063', '客户端管理修改', '123', '3',  '#', '', '', 1, 0, 'F', '0', '0', 'system:client:edit',         '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values('1064', '客户端管理删除', '123', '4',  '#', '', '', 1, 0, 'F', '0', '0', 'system:client:remove',       '#', 103, 1, sysdate(), null, null, '');
 insert into sys_menu values('1065', '客户端管理导出', '123', '5',  '#', '', '', 1, 0, 'F', '0', '0', 'system:client:export',       '#', 103, 1, sysdate(), null, null, '');
--- 发起流程按钮
-insert into sys_menu values('1640', '发起流程查询', '1638', '1',  '#', '', '', 1, 0, 'F', '0', '0', 'workflow:businessForm:query', '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values('1641', '发起流程新增', '1638', '2',  '#', '', '', 1, 0, 'F', '0', '0', 'workflow:businessForm:add',   '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values('1642', '发起流程修改', '1638', '3',  '#', '', '', 1, 0, 'F', '0', '0', 'workflow:businessForm:edit',  '#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values('1643', '发起流程删除', '1638', '4',  '#', '', '', 1, 0, 'F', '0', '0', 'workflow:businessForm:remove','#', 103, 1, sysdate(), null, null, '');
-insert into sys_menu values('1644', '发起流程导出', '1638', '5',  '#', '', '', 1, 0, 'F', '0', '0', 'workflow:businessForm:export','#', 103, 1, sysdate(), null, null, '');
 
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
@@ -883,94 +851,11 @@ create table sys_oss_config (
     primary key (oss_config_id)
 ) engine=innodb comment='对象存储配置表';
 
-insert into sys_oss_config values (1, '000000', 'minio',  'ruoyi',            'ruoyi123',        'ruoyi',             '', '127.0.0.1:9000',                '','N', '',             '1' ,'0', '', 103, 1, sysdate(), 1, sysdate(), NULL);
-insert into sys_oss_config values (2, '000000', 'qiniu',  'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi',             '', 's3-cn-north-1.qiniucs.com',     '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), NULL);
-insert into sys_oss_config values (3, '000000', 'aliyun', 'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi',             '', 'oss-cn-beijing.aliyuncs.com',   '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), NULL);
-insert into sys_oss_config values (4, '000000', 'qcloud', 'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi-1250000000',  '', 'cos.ap-beijing.myqcloud.com',   '','N', 'ap-beijing',   '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), NULL);
-insert into sys_oss_config values (5, '000000', 'image',  'ruoyi',            'ruoyi123',        'ruoyi',             'image', '127.0.0.1:9000',           '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), NULL);
-
--- ----------------------------
--- 流程表单信息表
--- ----------------------------
-drop table if exists wf_form;
-create table wf_form (
-  form_id         bigint        not null                  comment '表单id',
-  tenant_id       varchar(20)             default '000000'comment '租户编号',
-  form_name       varchar(255)            default null    comment '表单名称',
-  status          char(1)                 default '1'     comment '状态（0正常 1停用）',
-  content         longtext                                comment '表单内容',
-  create_dept     bigint                  default null    comment '创建部门',
-  create_by       bigint                  default null    comment '创建者',
-  create_time     datetime                default null    comment '创建时间',
-  update_by       bigint                  default null    comment '更新者',
-  update_time     datetime                default null    comment '更新时间',
-  remark          varchar(500)            default null    comment '备注',
-  primary key (form_id)
-) engine=innodb comment='流程表单信息表';
-
--- ----------------------------
--- 流程分类信息表
--- ----------------------------
-create table wf_category
-(
-    id            bigint                       not null comment '主键'
-        primary key,
-    category_name varchar(255)                 null comment '分类名称',
-    category_code varchar(255)                 null comment '分类编码',
-    parent_id     bigint                       null comment '父级id',
-    sort_num      int(19)                      null comment '排序',
-    tenant_id     varchar(20) default '000000' null comment '租户编号',
-    create_dept   bigint                       null comment '创建部门',
-    create_by     bigint                       null comment '创建者',
-    create_time   datetime                     null comment '创建时间',
-    update_by     bigint                       null comment '更新者',
-    update_time   datetime                     null comment '更新时间',
-    constraint uni_category_code
-        unique (category_code)
-) engine=innodb comment= '流程分类';
-
--- ----------------------------
--- 流程分类信息表
--- ----------------------------
-drop table if exists wf_form_definition;
-create table wf_form_definition
-(
-    id                         bigint                       not null comment '主键'
-        primary key,
-    form_id                    bigint                       not null comment '动态表单id',
-    process_definition_key     varchar(255)                 not null comment '流程定义key',
-    process_definition_name    varchar(255)                 not null comment '流程定义名称',
-    process_definition_id      varchar(255)                 not null comment '流程定义id',
-    process_definition_version int                          not null comment '流程定义版本',
-    tenant_id                  varchar(20) default '000000' null comment '租户编号',
-    create_dept                bigint                       null comment '创建部门',
-    create_by                  bigint                       null comment '创建者',
-    create_time                datetime                     null comment '创建时间',
-    update_by                  bigint                       null comment '更新者',
-    update_time                datetime                     null comment '更新时间'
-) engine=innodb comment= '动态表单与流程定义关联信息';
-
--- ----------------------------
--- 业务单据表
--- ----------------------------
-drop table if exists wf_business_form;
-create table wf_business_form
-(
-    id            bigint                       not null comment '主键'
-        primary key,
-    apply_code    varchar(255)                 not null comment '申请编码',
-    form_id       bigint                       not null comment '表单id',
-    form_name     varchar(255)                 not null comment '表单名称',
-    content       longtext                     not null comment '表单内容',
-    tenant_id     varchar(20) default '000000' null comment '租户编号',
-    create_dept   bigint                       null comment '创建部门',
-    create_by     bigint                       null comment '创建者',
-    create_time   datetime                     null comment '创建时间',
-    update_by     bigint                       null comment '更新者',
-    update_time   datetime                     null comment '更新时间',
-    content_value longtext                     null comment '表单值'
-) engine=innodb comment= '业务单据表';
-
+insert into sys_oss_config values (1, '000000', 'minio',  'ruoyi',            'ruoyi123',        'ruoyi',             '', '127.0.0.1:9000',                '','N', '',             '1' ,'0', '', 103, 1, sysdate(), 1, sysdate(), null);
+insert into sys_oss_config values (2, '000000', 'qiniu',  'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi',             '', 's3-cn-north-1.qiniucs.com',     '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), null);
+insert into sys_oss_config values (3, '000000', 'aliyun', 'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi',             '', 'oss-cn-beijing.aliyuncs.com',   '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), null);
+insert into sys_oss_config values (4, '000000', 'qcloud', 'XXXXXXXXXXXXXXX',  'XXXXXXXXXXXXXXX', 'ruoyi-1250000000',  '', 'cos.ap-beijing.myqcloud.com',   '','N', 'ap-beijing',   '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), null);
+insert into sys_oss_config values (5, '000000', 'image',  'ruoyi',            'ruoyi123',        'ruoyi',             'image', '127.0.0.1:9000',           '','N', '',             '1' ,'1', '', 103, 1, sysdate(), 1, sysdate(), null);
 
 -- ----------------------------
 -- 系统授权表

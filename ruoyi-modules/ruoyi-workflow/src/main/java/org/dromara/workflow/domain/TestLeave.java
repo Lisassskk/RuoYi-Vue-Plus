@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 
 import java.io.Serial;
+import java.util.Date;
 
 /**
  * 请假对象 test_leave
@@ -29,9 +30,19 @@ public class TestLeave extends BaseEntity {
     private Long id;
 
     /**
-     * 标题
+     * 请假类型
      */
-    private String title;
+    private String leaveType;
+
+    /**
+     * 开始时间
+     */
+    private Date startDate;
+
+    /**
+     * 结束时间
+     */
+    private Date endDate;
 
     /**
      * 请假天数
@@ -39,7 +50,7 @@ public class TestLeave extends BaseEntity {
     private Integer leaveDays;
 
     /**
-     * 备注
+     * 请假原因
      */
     private String remark;
 

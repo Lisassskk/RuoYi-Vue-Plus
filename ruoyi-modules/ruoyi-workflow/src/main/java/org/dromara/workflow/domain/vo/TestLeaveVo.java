@@ -8,6 +8,7 @@ import org.dromara.workflow.domain.TestLeave;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -31,10 +32,22 @@ public class TestLeaveVo implements Serializable {
     private Long id;
 
     /**
-     * 标题
+     * 请假类型
      */
-    @ExcelProperty(value = "标题")
-    private String title;
+    @ExcelProperty(value = "请假类型")
+    private String leaveType;
+
+    /**
+     * 开始时间
+     */
+    @ExcelProperty(value = "开始时间")
+    private Date startDate;
+
+    /**
+     * 结束时间
+     */
+    @ExcelProperty(value = "结束时间")
+    private Date endDate;
 
     /**
      * 请假天数
@@ -45,7 +58,7 @@ public class TestLeaveVo implements Serializable {
     /**
      * 备注
      */
-    @ExcelProperty(value = "备注")
+    @ExcelProperty(value = "请假原因")
     private String remark;
 
     /**
