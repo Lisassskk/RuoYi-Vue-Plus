@@ -22,8 +22,8 @@ create table test_leave
 (
     id          bigint                       not null comment '主键',
     leave_type  varchar(255)                 not null comment '请假类型',
-    startDate   datetime                     not null comment '开始时间',
-    endDate     datetime                     not null comment '结束时间',
+    start_date   datetime                     not null comment '开始时间',
+    end_date     datetime                     not null comment '结束时间',
     leave_days  int(10)                      not null comment '请假天数',
     remark      varchar(255)                 null comment '请假原因',
     create_dept bigint                       null comment '创建部门',
