@@ -2,6 +2,7 @@ package org.dromara.workflow.flowable.cmd;
 
 import org.flowable.common.engine.impl.interceptor.Command;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
+import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntityManager;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
  *
  * @author may
  */
-public class DeleteExecutionCmd implements Command<String>, Serializable {
+public class DeleteExecutionCmd implements Command<Void>, Serializable {
 
     /**
      * 执行id
@@ -24,9 +25,12 @@ public class DeleteExecutionCmd implements Command<String>, Serializable {
     }
 
     @Override
-    public String execute(CommandContext commandContext) {
+    public Void execute(CommandContext commandContext) {
         ExecutionEntityManager executionEntityManager = CommandContextUtil.getExecutionEntityManager();
-        executionEntityManager.delete(executionId);
+        ExecutionEntity entity = executionEntityManager.findById(executionId);
+        if (entity != null) {
+            executionEntityManager.deleteExecutionAndRelatedData(entity, "", false, false);
+        }
         return null;
     }
 }
