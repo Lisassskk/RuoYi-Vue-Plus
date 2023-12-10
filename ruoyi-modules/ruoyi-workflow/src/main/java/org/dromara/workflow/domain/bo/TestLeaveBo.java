@@ -57,6 +57,16 @@ public class TestLeaveBo extends BaseEntity {
     private Integer leaveDays;
 
     /**
+     * 开始时间
+     */
+    private Integer startLeaveDays;
+
+    /**
+     * 结束时间
+     */
+    private Integer endLeaveDays;
+
+    /**
      * 请假原因
      */
     private String remark;
