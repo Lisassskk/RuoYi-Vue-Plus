@@ -31,10 +31,7 @@ import org.dromara.workflow.flowable.cmd.ExecutionChildByExecutionIdCmd;
 import org.dromara.workflow.service.IActHiProcinstService;
 import org.dromara.workflow.service.IActProcessInstanceService;
 import org.dromara.workflow.utils.WorkflowUtils;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.FlowElement;
-import org.flowable.bpmn.model.GraphicInfo;
-import org.flowable.bpmn.model.UserTask;
+import org.flowable.bpmn.model.*;
 import org.flowable.engine.*;
 import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.history.HistoricProcessInstance;
@@ -293,6 +290,18 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
                 graphicInfoVo.setNodeId(flowElement.getId());
                 graphicInfoVo.setNodeName(flowElement.getName());
                 graphicInfoVos.add(graphicInfoVo);
+            }
+            if (flowElement instanceof SubProcess) {
+                Collection<FlowElement> subFlowElements = ((SubProcess) flowElement).getFlowElements();
+                for (FlowElement element : subFlowElements) {
+                    if (element instanceof UserTask) {
+                        GraphicInfo graphicInfo = bpmnModel.getGraphicInfo(element.getId());
+                        GraphicInfoVo graphicInfoVo = BeanUtil.toBean(graphicInfo, GraphicInfoVo.class);
+                        graphicInfoVo.setNodeId(element.getId());
+                        graphicInfoVo.setNodeName(element.getName());
+                        graphicInfoVos.add(graphicInfoVo);
+                    }
+                }
             }
         }
         //节点图形信息

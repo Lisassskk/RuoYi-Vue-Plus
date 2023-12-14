@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
-import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.log.annotation.Log;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -16,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +73,7 @@ public class ActProcessDefinitionController extends BaseController {
     public R<Map<String, Object>> getXml(@NotBlank(message = "流程定义id不能为空") @PathVariable String processDefinitionId) {
         Map<String, Object> map = new HashMap<>();
         String xmlStr = actProcessDefinitionService.processDefinitionXml(processDefinitionId);
-        map.put("xml", StringUtils.splitList("\n"));
+        map.put("xml", Arrays.asList(xmlStr.split("\n")));
         map.put("xmlStr", xmlStr);
         return R.ok(map);
     }

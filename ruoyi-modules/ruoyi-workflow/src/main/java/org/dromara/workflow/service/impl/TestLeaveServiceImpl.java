@@ -71,10 +71,10 @@ public class TestLeaveServiceImpl implements ITestLeaveService {
     }
 
     private LambdaQueryWrapper<TestLeave> buildQueryWrapper(TestLeaveBo bo) {
-        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<TestLeave> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getLeaveType()), TestLeave::getLeaveType, bo.getLeaveType());
-        lqw.eq(bo.getLeaveDays() != null, TestLeave::getLeaveDays, bo.getLeaveDays());
+        lqw.ge(bo.getStartLeaveDays() != null,TestLeave::getLeaveDays, bo.getStartLeaveDays());
+        lqw.le(bo.getEndLeaveDays() != null,TestLeave::getLeaveDays, bo.getEndLeaveDays());
         return lqw;
     }
 
