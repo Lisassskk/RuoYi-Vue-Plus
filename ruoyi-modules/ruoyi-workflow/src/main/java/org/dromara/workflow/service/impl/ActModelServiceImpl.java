@@ -1,6 +1,7 @@
 package org.dromara.workflow.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -24,6 +25,7 @@ import org.dromara.system.domain.SysRole;
 import org.dromara.system.domain.SysUser;
 import org.dromara.system.mapper.SysRoleMapper;
 import org.dromara.system.mapper.SysUserMapper;
+import org.dromara.workflow.common.constant.FlowConstant;
 import org.dromara.workflow.domain.bo.ModelBo;
 import org.dromara.workflow.domain.vo.GroupRepresentation;
 import org.dromara.workflow.domain.vo.ResultListDataRepresentation;
@@ -89,7 +91,7 @@ public class ActModelServiceImpl implements IActModelService {
             query.modelCategory(modelBo.getCategoryCode());
         }
         query.orderByLastUpdateTime().desc();
-        //创建时间降序排列
+        // 创建时间降序排列
         query.orderByCreateTime().desc();
         // 分页查询
         List<Model> modelList = query.listPage(modelBo.getPageNum(), modelBo.getPageSize());
@@ -226,14 +228,27 @@ public class ActModelServiceImpl implements IActModelService {
             model.setVersion(model.getVersion() + 1);
             // 获取唯一标识key
             String key = values.getFirst("key");
+            // 校验key命名规范
+            if (!Validator.isMatchRegex(FlowConstant.MODEL_KEY_PATTERN, key)) {
+                throw new ServiceException("模型标识key只能字符或者下划线开头！");
+            }
             List<Model> list = repositoryService.createModelQuery().modelKey(key).modelTenantId(TenantHelper.getTenantId()).list();
             list.stream().filter(e -> !e.getId().equals(model.getId())).findFirst().ifPresent(e -> {
-                throw new ServiceException("模型key已存在！");
+                throw new ServiceException("模型标识key已存在！");
             });
             model.setKey(key);
             repositoryService.saveModel(model);
-            //解决设计器选择设置流程发起人设置变量有问题
+            // 解决设计器选择设置流程发起人设置变量有问题
             JsonNode jsonNode = objectMapper.readTree(values.getFirst("json_xml"));
+            // 校验流程标识
+            String processId = jsonNode.get("properties").get("process_id").textValue();
+            if (StringUtils.isBlank(processId)) {
+                throw new ServiceException("流程标识不能为空！");
+            }
+            if (!Validator.isMatchRegex(FlowConstant.MODEL_KEY_PATTERN, processId)) {
+                throw new ServiceException("流程标识只能字符或者下划线开头！");
+            }
+
             byte[] xmlBytes = WorkflowUtils.bpmnJsonToXmlBytes(Objects.requireNonNull(JsonUtils.toJsonString(jsonNode)).getBytes(StandardCharsets.UTF_8));
             if (ArrayUtil.isEmpty(xmlBytes)) {
                 throw new ServiceException("模型不能为空！");
@@ -256,7 +271,7 @@ public class ActModelServiceImpl implements IActModelService {
     @Transactional(rollbackFor = Exception.class)
     public boolean modelDeploy(String id) {
         try {
-            //查询流程定义模型xml
+            // 查询流程定义模型xml
             byte[] xmlBytes = repositoryService.getModelEditorSource(id);
             if (ArrayUtil.isEmpty(xmlBytes)) {
                 throw new ServiceException("模型数据为空，请先设计流程定义模型，再进行部署！");
@@ -279,7 +294,7 @@ public class ActModelServiceImpl implements IActModelService {
             Model model = repositoryService.getModel(id);
             // xml资源的名称 ，对应act_ge_bytearray表中的name_字段
             String processName = model.getName() + ".bpmn20.xml";
-            //调用部署相关的api方法进行部署流程定义
+            // 调用部署相关的api方法进行部署流程定义
             Deployment deployment = repositoryService.createDeployment()
                 // 部署名称
                 .name(model.getName())
@@ -319,7 +334,7 @@ public class ActModelServiceImpl implements IActModelService {
             zos = ZipUtil.getZipOutputStream(response.getOutputStream(), StandardCharsets.UTF_8);
             // 压缩包文件名
             String zipName = "模型不存在";
-            //查询模型基本信息
+            // 查询模型基本信息
             Model model = repositoryService.getModel(modelId);
             byte[] xmlBytes = repositoryService.getModelEditorSource(modelId);
             if (ObjectUtil.isNotNull(model)) {

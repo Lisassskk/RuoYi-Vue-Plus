@@ -79,4 +79,8 @@ public interface FlowConstant {
      */
     String FLOWABLE_SKIP_EXPRESSION_ENABLED = "_FLOWABLE_SKIP_EXPRESSION_ENABLED";
 
+    /**
+     * 模型标识key命名规范正则表达式
+     */
+    String MODEL_KEY_PATTERN = "^[a-zA-Z][a-zA-Z0-9_]{0,254}$";
 }
