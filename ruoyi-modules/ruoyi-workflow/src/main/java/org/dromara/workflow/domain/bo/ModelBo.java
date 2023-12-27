@@ -33,7 +33,7 @@ public class ModelBo extends PageEntity implements Serializable {
      * 模型标识key
      */
     @NotBlank(message = "模型标识key不能为空", groups = {AddGroup.class})
-    @Pattern(regexp = FlowConstant.MODE_KEY_PATTERN, message = "模型标识key只能字符或者下划线开头", groups = {AddGroup.class})
+    @Pattern(regexp = FlowConstant.MODEL_KEY_PATTERN, message = "模型标识key只能字符或者下划线开头", groups = {AddGroup.class})
     private String key;
 
     /**

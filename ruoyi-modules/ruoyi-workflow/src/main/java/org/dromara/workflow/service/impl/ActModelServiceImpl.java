@@ -229,7 +229,7 @@ public class ActModelServiceImpl implements IActModelService {
             // 获取唯一标识key
             String key = values.getFirst("key");
             // 校验key命名规范
-            if (!Validator.isMatchRegex(FlowConstant.MODE_KEY_PATTERN, key)) {
+            if (!Validator.isMatchRegex(FlowConstant.MODEL_KEY_PATTERN, key)) {
                 throw new ServiceException("模型标识key只能字符或者下划线开头！");
             }
             List<Model> list = repositoryService.createModelQuery().modelKey(key).modelTenantId(TenantHelper.getTenantId()).list();
@@ -245,7 +245,7 @@ public class ActModelServiceImpl implements IActModelService {
             if (StringUtils.isBlank(processId)) {
                 throw new ServiceException("流程标识不能为空！");
             }
-            if (!Validator.isMatchRegex(FlowConstant.MODE_KEY_PATTERN, processId)) {
+            if (!Validator.isMatchRegex(FlowConstant.MODEL_KEY_PATTERN, processId)) {
                 throw new ServiceException("流程标识只能字符或者下划线开头！");
             }
 
