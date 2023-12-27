@@ -26,8 +26,10 @@ import org.dromara.workflow.domain.vo.GraphicInfoVo;
 import org.dromara.workflow.domain.vo.ProcessInstanceVo;
 import org.dromara.workflow.domain.vo.TaskVo;
 import org.dromara.workflow.flowable.CustomDefaultProcessDiagramGenerator;
+import org.dromara.workflow.flowable.strategy.FlowEventStrategy;
 import org.dromara.workflow.flowable.cmd.DeleteExecutionCmd;
 import org.dromara.workflow.flowable.cmd.ExecutionChildByExecutionIdCmd;
+import org.dromara.workflow.flowable.strategy.FlowProcessEventHandler;
 import org.dromara.workflow.service.IActHiProcinstService;
 import org.dromara.workflow.service.IActProcessInstanceService;
 import org.dromara.workflow.utils.WorkflowUtils;
@@ -69,6 +71,7 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
     private final TaskService taskService;
     private final IActHiProcinstService actHiProcinstService;
     private final ManagementService managementService;
+    private final FlowEventStrategy flowEventStrategy;
 
     @Value("${flowable.activity-font-name}")
     private String activityFontName;
@@ -366,6 +369,8 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
             }
             runtimeService.updateBusinessStatus(processInvalidBo.getProcessInstanceId(), BusinessStatusEnum.INVALID.getStatus());
             runtimeService.deleteProcessInstance(processInvalidBo.getProcessInstanceId(), deleteReason);
+            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(historicProcessInstance.getProcessDefinitionKey());
+            processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.INVALID.getStatus());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -495,6 +500,8 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
                 managementService.executeCommand(deleteExecutionCmd);
             }
             runtimeService.updateBusinessStatus(processInstanceId, BusinessStatusEnum.CANCEL.getStatus());
+            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
+            processHandler.handleProcess(processInstanceId, BusinessStatusEnum.CANCEL.getStatus());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

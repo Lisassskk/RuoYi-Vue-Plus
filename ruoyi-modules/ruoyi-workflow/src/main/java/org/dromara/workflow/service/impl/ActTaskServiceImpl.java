@@ -20,7 +20,9 @@ import org.dromara.workflow.common.enums.TaskStatusEnum;
 import org.dromara.workflow.domain.bo.*;
 import org.dromara.workflow.domain.vo.MultiInstanceVo;
 import org.dromara.workflow.domain.vo.TaskVo;
+import org.dromara.workflow.flowable.strategy.FlowEventStrategy;
 import org.dromara.workflow.flowable.cmd.*;
+import org.dromara.workflow.flowable.strategy.FlowProcessEventHandler;
 import org.dromara.workflow.service.IActTaskService;
 import org.dromara.workflow.utils.WorkflowUtils;
 import org.flowable.common.engine.impl.identity.Authentication;
@@ -59,6 +61,7 @@ public class ActTaskServiceImpl implements IActTaskService {
     private final HistoryService historyService;
     private final IdentityService identityService;
     private final ManagementService managementService;
+    private final FlowEventStrategy flowEventStrategy;
 
     /**
      * 启动任务
@@ -161,6 +164,8 @@ public class ActTaskServiceImpl implements IActTaskService {
             if (CollUtil.isEmpty(list)) {
                 UpdateBusinessStatusCmd updateBusinessStatusCmd = new UpdateBusinessStatusCmd(task.getProcessInstanceId(), BusinessStatusEnum.FINISH.getStatus());
                 managementService.executeCommand(updateBusinessStatusCmd);
+                FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
+                processHandler.handleProcess(processInstance.getId(), BusinessStatusEnum.FINISH.getStatus());
             } else {
                 sendMessage(list, processInstance.getName(), completeTaskBo.getMessageType(), null);
             }
@@ -431,6 +436,8 @@ public class ActTaskServiceImpl implements IActTaskService {
                 runtimeService.deleteProcessInstance(task.getProcessInstanceId(), StrUtil.EMPTY);
             }
             runtimeService.updateBusinessStatus(task.getProcessInstanceId(), BusinessStatusEnum.TERMINATION.getStatus());
+            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(historicProcessInstance.getProcessDefinitionKey());
+            processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.TERMINATION.getStatus());
             return true;
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
@@ -609,6 +616,8 @@ public class ActTaskServiceImpl implements IActTaskService {
                 managementService.executeCommand(deleteExecutionCmd);
             }
             runtimeService.updateBusinessStatus(processInstanceId, BusinessStatusEnum.BACK.getStatus());
+            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
+            processHandler.handleProcess(processInstanceId, BusinessStatusEnum.BACK.getStatus());
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
         }
