@@ -1,6 +1,6 @@
 package org.dromara.workflow.flowable.strategy;
 
-import org.flowable.task.service.impl.persistence.entity.TaskEntity;
+import org.flowable.task.api.Task;
 
 /**
  * 流程任务监听
@@ -13,7 +13,7 @@ public interface FlowTaskEventHandler {
     /**
      * 执行办理任务监听
      *
-     * @param taskEntity 任务
+     * @param task 任务
      */
-    void handleTask(TaskEntity taskEntity);
+    void handleTask(Task task);
 }

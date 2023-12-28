@@ -370,7 +370,9 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
             runtimeService.updateBusinessStatus(processInvalidBo.getProcessInstanceId(), BusinessStatusEnum.INVALID.getStatus());
             runtimeService.deleteProcessInstance(processInvalidBo.getProcessInstanceId(), deleteReason);
             FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(historicProcessInstance.getProcessDefinitionKey());
-            processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.INVALID.getStatus());
+            if (processHandler != null) {
+                processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.INVALID.getStatus());
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -501,7 +503,9 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
             }
             runtimeService.updateBusinessStatus(processInstanceId, BusinessStatusEnum.CANCEL.getStatus());
             FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
-            processHandler.handleProcess(processInstanceId, BusinessStatusEnum.CANCEL.getStatus());
+            if (processHandler != null) {
+                processHandler.handleProcess(processInstanceId, BusinessStatusEnum.CANCEL.getStatus());
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();

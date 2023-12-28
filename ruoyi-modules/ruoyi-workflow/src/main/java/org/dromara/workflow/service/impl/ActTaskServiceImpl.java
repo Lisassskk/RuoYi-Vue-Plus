@@ -23,6 +23,7 @@ import org.dromara.workflow.domain.vo.TaskVo;
 import org.dromara.workflow.flowable.strategy.FlowEventStrategy;
 import org.dromara.workflow.flowable.cmd.*;
 import org.dromara.workflow.flowable.strategy.FlowProcessEventHandler;
+import org.dromara.workflow.flowable.strategy.FlowTaskEventHandler;
 import org.dromara.workflow.service.IActTaskService;
 import org.dromara.workflow.utils.WorkflowUtils;
 import org.flowable.common.engine.impl.identity.Authentication;
@@ -152,6 +153,11 @@ public class ActTaskServiceImpl implements IActTaskService {
                 return true;
             }
             runtimeService.updateBusinessStatus(task.getProcessInstanceId(), BusinessStatusEnum.WAITING.getStatus());
+            String key = processInstance.getProcessDefinitionKey() + "_" + task.getTaskDefinitionKey();
+            FlowTaskEventHandler taskHandler = flowEventStrategy.getTaskHandler(key);
+            if (taskHandler != null) {
+                taskHandler.handleTask(task);
+            }
             //办理意见
             taskService.addComment(completeTaskBo.getTaskId(), task.getProcessInstanceId(), TaskStatusEnum.PASS.getStatus(), StringUtils.isBlank(completeTaskBo.getMessage()) ? "同意" : completeTaskBo.getMessage());
             //办理任务
@@ -165,7 +171,9 @@ public class ActTaskServiceImpl implements IActTaskService {
                 UpdateBusinessStatusCmd updateBusinessStatusCmd = new UpdateBusinessStatusCmd(task.getProcessInstanceId(), BusinessStatusEnum.FINISH.getStatus());
                 managementService.executeCommand(updateBusinessStatusCmd);
                 FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
-                processHandler.handleProcess(processInstance.getId(), BusinessStatusEnum.FINISH.getStatus());
+                if (processHandler != null) {
+                    processHandler.handleProcess(processInstance.getId(), BusinessStatusEnum.FINISH.getStatus());
+                }
             } else {
                 sendMessage(list, processInstance.getName(), completeTaskBo.getMessageType(), null);
             }
@@ -437,7 +445,9 @@ public class ActTaskServiceImpl implements IActTaskService {
             }
             runtimeService.updateBusinessStatus(task.getProcessInstanceId(), BusinessStatusEnum.TERMINATION.getStatus());
             FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(historicProcessInstance.getProcessDefinitionKey());
-            processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.TERMINATION.getStatus());
+            if (processHandler != null) {
+                processHandler.handleProcess(historicProcessInstance.getId(), BusinessStatusEnum.TERMINATION.getStatus());
+            }
             return true;
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
@@ -617,7 +627,9 @@ public class ActTaskServiceImpl implements IActTaskService {
             }
             runtimeService.updateBusinessStatus(processInstanceId, BusinessStatusEnum.BACK.getStatus());
             FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
-            processHandler.handleProcess(processInstanceId, BusinessStatusEnum.BACK.getStatus());
+            if (processHandler != null) {
+                processHandler.handleProcess(processInstanceId, BusinessStatusEnum.BACK.getStatus());
+            }
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
         }
