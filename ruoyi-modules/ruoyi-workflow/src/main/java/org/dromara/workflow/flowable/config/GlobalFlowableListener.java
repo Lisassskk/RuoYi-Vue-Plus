@@ -107,8 +107,8 @@ public class GlobalFlowableListener implements FlowableEventListener {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(entity.getProcessDefinitionId()).singleResult();
         String processDefinitionKey = processDefinition.getKey();
         String taskDefinitionKey = entity.getTaskDefinitionKey();
-        String beanName = processDefinitionKey + "_" + taskDefinitionKey;
-        FlowTaskEventHandler handler = flowEventStrategy.getTaskHandler(beanName);
+        String key = processDefinitionKey + "_" + taskDefinitionKey;
+        FlowTaskEventHandler handler = flowEventStrategy.getTaskHandler(key);
         if (handler != null) {
             handler.handleTask(entity);
         }

@@ -16,12 +16,12 @@ import java.lang.annotation.*;
 public @interface FlowListenerAnnotation {
 
     /**
-     * 流程定义
+     * 流程定义key
      */
     String processDefinitionKey();
 
     /**
-     * 节点定义
+     * 节点id
      */
     String taskDefId() default "";
 }

@@ -23,7 +23,7 @@ public class FlowEventStrategy implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof FlowTaskEventHandler || bean instanceof FlowProcessEventHandler) {
+        if (bean instanceof FlowTaskEventHandler) {
             FlowListenerAnnotation annotation = bean.getClass().getAnnotation(FlowListenerAnnotation.class);
             if (null != annotation) {
                 if (StringUtils.isNotBlank(annotation.processDefinitionKey()) && StringUtils.isNotBlank(annotation.taskDefId())) {
@@ -32,6 +32,11 @@ public class FlowEventStrategy implements BeanPostProcessor {
                         flowTaskEventHandlers.put(id, (FlowTaskEventHandler) bean);
                     }
                 }
+            }
+        }
+        if (bean instanceof FlowProcessEventHandler) {
+            FlowListenerAnnotation annotation = bean.getClass().getAnnotation(FlowListenerAnnotation.class);
+            if (null != annotation) {
                 if (StringUtils.isNotBlank(annotation.processDefinitionKey()) && StringUtils.isBlank(annotation.taskDefId())) {
                     if (!flowProcessEventHandlers.containsKey(annotation.processDefinitionKey())) {
                         flowProcessEventHandlers.put(annotation.processDefinitionKey(), (FlowProcessEventHandler) bean);
@@ -45,24 +50,24 @@ public class FlowEventStrategy implements BeanPostProcessor {
     /**
      * 获取可执行bean
      *
-     * @param beanName beanName
+     * @param key key
      */
-    public FlowTaskEventHandler getTaskHandler(String beanName) {
-        if (!flowTaskEventHandlers.containsKey(beanName)) {
+    public FlowTaskEventHandler getTaskHandler(String key) {
+        if (!flowTaskEventHandlers.containsKey(key)) {
             return null;
         }
-        return flowTaskEventHandlers.get(beanName);
+        return flowTaskEventHandlers.get(key);
     }
 
     /**
      * 获取可执行bean
      *
-     * @param beanName beanName
+     * @param key key
      */
-    public FlowProcessEventHandler getProcessHandler(String beanName) {
-        if (!flowProcessEventHandlers.containsKey(beanName)) {
+    public FlowProcessEventHandler getProcessHandler(String key) {
+        if (!flowProcessEventHandlers.containsKey(key)) {
             return null;
         }
-        return flowProcessEventHandlers.get(beanName);
+        return flowProcessEventHandlers.get(key);
     }
 }
