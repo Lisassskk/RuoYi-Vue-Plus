@@ -83,6 +83,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
         lqw.eq(ObjectUtil.isNotNull(bo.getParentId()), SysDept::getParentId, bo.getParentId());
         lqw.like(StringUtils.isNotBlank(bo.getDeptName()), SysDept::getDeptName, bo.getDeptName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), SysDept::getStatus, bo.getStatus());
+        lqw.orderByAsc(SysDept::getAncestors);
         lqw.orderByAsc(SysDept::getParentId);
         lqw.orderByAsc(SysDept::getOrderNum);
         lqw.orderByAsc(SysDept::getDeptId);
@@ -221,8 +222,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
         if (LoginHelper.isSuperAdmin()) {
             return;
         }
-        SysDeptVo dept = baseMapper.selectDeptById(deptId);
-        if (ObjectUtil.isNull(dept)) {
+        if (baseMapper.countDeptById(deptId) == 0) {
             throw new ServiceException("没有权限访问部门数据！");
         }
     }
