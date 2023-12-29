@@ -85,13 +85,27 @@ public class WorkflowUtils {
         }
         //解决设计器选择设置流程发起人设置变量有问题
         Collection<FlowElement> flowElements = bpmnModel.getMainProcess().getFlowElements();
-        for (FlowElement flowElement : flowElements) {
-            if (flowElement instanceof UserTask && INITIATOR_SET.equals(((UserTask) flowElement).getAssignee())) {
-                ((UserTask) flowElement).setAssignee(INITIATOR_SET_UPDATE);
-            }
-        }
+        repairInitiatorVariable(flowElements);
         // 2.将bpmnModel转为xml
         return new BpmnXMLConverter().convertToXML(bpmnModel);
+    }
+
+    /**
+     * 修复发起人节点变量错误问题
+     *
+     * @param flowElements 节点
+     */
+    private static void repairInitiatorVariable(Collection<FlowElement> flowElements) {
+        for (FlowElement flowElement : flowElements) {
+            if (flowElement instanceof SubProcess) {
+                Collection<FlowElement> subFlowElements = ((SubProcess) flowElement).getFlowElements();
+                repairInitiatorVariable(subFlowElements);
+            } else {
+                if (flowElement instanceof UserTask && INITIATOR_SET.equals(((UserTask) flowElement).getAssignee())) {
+                    ((UserTask) flowElement).setAssignee(INITIATOR_SET_UPDATE);
+                }
+            }
+        }
     }
 
     /**
@@ -153,8 +167,8 @@ public class WorkflowUtils {
         }
 
         FlowElement targetFlowElement = outgoingFlows.get(0).getTargetFlowElement();
-        if (!(targetFlowElement instanceof UserTask)) {
-            throw new ServerException(subtask ? "子流程开始节点后第一个节点必须是用户任务！" : "开始节点后第一个节点必须是用户任务！");
+        if (!(targetFlowElement instanceof UserTask) && !subtask) {
+            throw new ServerException("开始节点后第一个节点必须是用户任务！");
         }
 
         List<EndEvent> endEventList = flowElements.stream().filter(EndEvent.class::isInstance).map(EndEvent.class::cast).collect(Collectors.toList());
