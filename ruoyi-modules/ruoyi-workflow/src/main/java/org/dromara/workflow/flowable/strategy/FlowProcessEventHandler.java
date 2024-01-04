@@ -10,7 +10,7 @@ package org.dromara.workflow.flowable.strategy;
 public interface FlowProcessEventHandler {
 
     /**
-     * 执行办理任务监听
+     * 执行办理任务监听 当状态为草稿，驳回，撤销时说明流程为申请人节点提交办理
      *
      * @param processInstanceId 流程实例id
      * @param status            状态

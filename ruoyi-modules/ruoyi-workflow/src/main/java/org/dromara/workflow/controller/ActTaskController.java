@@ -209,7 +209,7 @@ public class ActTaskController extends BaseController {
      */
     @GetMapping("/getBusinessStatus/{taskId}")
     public R<String> getBusinessStatus(@PathVariable String taskId) {
-        return R.ok("操作成功", WorkflowUtils.getBusinessStatus(taskId));
+        return R.ok("操作成功", WorkflowUtils.getBusinessStatusByTaskId(taskId));
     }
 
 
