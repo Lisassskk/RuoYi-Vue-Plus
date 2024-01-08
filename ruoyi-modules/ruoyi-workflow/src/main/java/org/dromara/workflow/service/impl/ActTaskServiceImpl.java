@@ -150,6 +150,13 @@ public class ActTaskServiceImpl implements IActTaskService {
                 taskService.complete(newTask.getId());
                 return true;
             }
+            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
+            String businessStatus = WorkflowUtils.getBusinessStatus(task.getProcessInstanceId());
+            if (BusinessStatusEnum.DRAFT.getStatus().equals(businessStatus) || BusinessStatusEnum.BACK.getStatus().equals(businessStatus) || BusinessStatusEnum.CANCEL.getStatus().equals(businessStatus)) {
+                if (processHandler != null) {
+                    processHandler.handleProcess(processInstance.getId(), businessStatus);
+                }
+            }
             runtimeService.updateBusinessStatus(task.getProcessInstanceId(), BusinessStatusEnum.WAITING.getStatus());
             String key = processInstance.getProcessDefinitionKey() + "_" + task.getTaskDefinitionKey();
             FlowTaskEventHandler taskHandler = flowEventStrategy.getTaskHandler(key);
@@ -163,14 +170,6 @@ public class ActTaskServiceImpl implements IActTaskService {
                 taskService.complete(completeTaskBo.getTaskId(), completeTaskBo.getVariables());
             } else {
                 taskService.complete(completeTaskBo.getTaskId());
-            }
-            FlowProcessEventHandler processHandler = flowEventStrategy.getProcessHandler(processInstance.getProcessDefinitionKey());
-
-            String businessStatus = WorkflowUtils.getBusinessStatus(task.getProcessInstanceId());
-            if (BusinessStatusEnum.DRAFT.getStatus().equals(businessStatus) || BusinessStatusEnum.BACK.getStatus().equals(businessStatus) || BusinessStatusEnum.CANCEL.getStatus().equals(businessStatus)) {
-                if (processHandler != null) {
-                    processHandler.handleProcess(processInstance.getId(), businessStatus);
-                }
             }
             List<Task> list = taskService.createTaskQuery().taskTenantId(TenantHelper.getTenantId()).processInstanceId(task.getProcessInstanceId()).list();
             if (CollUtil.isEmpty(list)) {
