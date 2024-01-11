@@ -14,9 +14,7 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.system.domain.SysUser;
 import org.dromara.system.domain.SysUserRole;
-import org.dromara.system.domain.vo.SysDeptVo;
 import org.dromara.system.domain.vo.SysUserVo;
-import org.dromara.system.mapper.SysDeptMapper;
 import org.dromara.system.mapper.SysUserMapper;
 import org.dromara.system.mapper.SysUserRoleMapper;
 import org.dromara.workflow.domain.bo.SysUserMultiBo;
@@ -34,8 +32,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 工作流用户选人管理 业务处理层
@@ -48,7 +44,6 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
 
     private final SysUserMapper sysUserMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
-    private final SysDeptMapper sysDeptMapper;
     private final TaskService taskService;
     private final RuntimeService runtimeService;
 
@@ -121,9 +116,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
                 taskVo.setName(task.getName());
                 taskVo.setAssignee(userId);
                 if (CollectionUtil.isNotEmpty(sysUsers)) {
-                    sysUsers.stream().filter(u -> u.getUserId().toString().equals(userId.toString())).findFirst().ifPresent(u -> {
-                        taskVo.setAssigneeName(u.getNickName());
-                    });
+                    sysUsers.stream().filter(u -> u.getUserId().toString().equals(userId.toString())).findFirst().ifPresent(u -> taskVo.setAssigneeName(u.getNickName()));
                 }
                 taskListVo.add(taskVo);
             }
@@ -144,9 +137,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
                     taskVo.setName(t.getName());
                     taskVo.setAssignee(Long.valueOf(t.getAssignee()));
                     if (CollectionUtil.isNotEmpty(sysUsers)) {
-                        sysUsers.stream().filter(u -> u.getUserId().toString().equals(t.getAssignee())).findFirst().ifPresent(e -> {
-                            taskVo.setAssigneeName(e.getNickName());
-                        });
+                        sysUsers.stream().filter(u -> u.getUserId().toString().equals(t.getAssignee())).findFirst().ifPresent(e -> taskVo.setAssigneeName(e.getNickName()));
                     }
                     taskListVo.add(taskVo);
                 }
@@ -170,10 +161,6 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
         if (CollUtil.isEmpty(collectDeptId)) {
             return page;
         }
-        List<SysDeptVo> sysDeptList = sysDeptMapper.selectVoBatchIds(collectDeptId);
-        records.forEach(e -> {
-            sysDeptList.stream().filter(d -> d.getDeptId().equals(e.getDeptId())).findFirst().ifPresent(e::setDept);
-        });
         page.setRecords(records);
         return page;
     }
@@ -192,16 +179,7 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
         // 检索条件
         queryWrapper.eq(SysUser::getStatus, UserStatus.OK.getCode());
         queryWrapper.in(SysUser::getUserId, userIds);
-        List<SysUserVo> sysUserVos = sysUserMapper.selectVoList(queryWrapper);
-        List<Long> collectDeptId = sysUserVos.stream().map(SysUserVo::getDeptId).filter(Objects::nonNull).collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(collectDeptId)) {
-            return sysUserVos;
-        }
-        List<SysDeptVo> sysDeptList = sysDeptMapper.selectVoBatchIds(collectDeptId);
-        sysUserVos.forEach(e -> {
-            sysDeptList.stream().filter(d -> d.getDeptId().equals(e.getDeptId())).findFirst().ifPresent(e::setDept);
-        });
-        return sysUserVos;
+        return sysUserMapper.selectVoList(queryWrapper);
     }
 
     /**
