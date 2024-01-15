@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class TestCustomTaskHandler implements FlowTaskEventHandler {
 
     @Override
-    public void handleTask(Task task) {
-        log.info("任务名称:" + task.getName());
+    public void handleTask(Task task, String businessKey) {
+        log.info("任务名称:" + task.getName() + ",业务ID:" + businessKey);
     }
 }

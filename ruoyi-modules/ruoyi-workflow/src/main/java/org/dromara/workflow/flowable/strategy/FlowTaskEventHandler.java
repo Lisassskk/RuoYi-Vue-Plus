@@ -13,7 +13,8 @@ public interface FlowTaskEventHandler {
     /**
      * 执行办理任务监听
      *
-     * @param task 任务
+     * @param task        任务
+     * @param businessKey 业务id
      */
-    void handleTask(Task task);
+    void handleTask(Task task, String businessKey);
 }

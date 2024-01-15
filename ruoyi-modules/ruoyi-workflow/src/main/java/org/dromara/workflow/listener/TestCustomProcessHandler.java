@@ -18,7 +18,7 @@ public class TestCustomProcessHandler implements FlowProcessEventHandler {
 
 
     @Override
-    public void handleProcess(String processInstanceId, String status) {
-        log.info("流程实例ID:" + processInstanceId + ",状态:" + status);
+    public void handleProcess(String businessKey, String status, boolean submit) {
+        log.info("业务ID:" + businessKey + ",状态:" + status);
     }
 }
