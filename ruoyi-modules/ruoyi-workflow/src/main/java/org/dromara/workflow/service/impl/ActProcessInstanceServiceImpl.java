@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
  * 流程实例 服务层实现
  *
@@ -286,30 +287,32 @@ public class ActProcessInstanceServiceImpl implements IActProcessInstanceService
         BpmnModel bpmnModel = repositoryService.getBpmnModel(list.get(0).getProcessDefinitionId());
         List<GraphicInfoVo> graphicInfoVos = new ArrayList<>();
         Collection<FlowElement> flowElements = bpmnModel.getMainProcess().getFlowElements();
+        //节点图形信息
+        buildGraphicInfo(flowElements, graphicInfoVos, bpmnModel);
+        map.put("graphicInfoVos", graphicInfoVos);
+        return map;
+    }
+
+    /**
+     * 构建节点图形信息
+     *
+     * @param flowElements 节点
+     */
+    private static void buildGraphicInfo(Collection<FlowElement> flowElements, List<GraphicInfoVo> graphicInfoVos, BpmnModel bpmnModel) {
         for (FlowElement flowElement : flowElements) {
-            if (flowElement instanceof UserTask) {
-                GraphicInfo graphicInfo = bpmnModel.getGraphicInfo(flowElement.getId());
-                GraphicInfoVo graphicInfoVo = BeanUtil.toBean(graphicInfo, GraphicInfoVo.class);
-                graphicInfoVo.setNodeId(flowElement.getId());
-                graphicInfoVo.setNodeName(flowElement.getName());
-                graphicInfoVos.add(graphicInfoVo);
-            }
             if (flowElement instanceof SubProcess) {
                 Collection<FlowElement> subFlowElements = ((SubProcess) flowElement).getFlowElements();
-                for (FlowElement element : subFlowElements) {
-                    if (element instanceof UserTask) {
-                        GraphicInfo graphicInfo = bpmnModel.getGraphicInfo(element.getId());
-                        GraphicInfoVo graphicInfoVo = BeanUtil.toBean(graphicInfo, GraphicInfoVo.class);
-                        graphicInfoVo.setNodeId(element.getId());
-                        graphicInfoVo.setNodeName(element.getName());
-                        graphicInfoVos.add(graphicInfoVo);
-                    }
+                buildGraphicInfo(subFlowElements, graphicInfoVos, bpmnModel);
+            } else {
+                if (flowElement instanceof UserTask) {
+                    GraphicInfo graphicInfo = bpmnModel.getGraphicInfo(flowElement.getId());
+                    GraphicInfoVo graphicInfoVo = BeanUtil.toBean(graphicInfo, GraphicInfoVo.class);
+                    graphicInfoVo.setNodeId(flowElement.getId());
+                    graphicInfoVo.setNodeName(flowElement.getName());
+                    graphicInfoVos.add(graphicInfoVo);
                 }
             }
         }
-        //节点图形信息
-        map.put("graphicInfoVos", graphicInfoVos);
-        return map;
     }
 
     /**
