@@ -238,7 +238,6 @@ public class ActModelServiceImpl implements IActModelService {
             });
             model.setKey(key);
             repositoryService.saveModel(model);
-            // 解决设计器选择设置流程发起人设置变量有问题
             JsonNode jsonNode = objectMapper.readTree(values.getFirst("json_xml"));
             // 校验流程标识
             String processId = jsonNode.get("properties").get("process_id").textValue();
@@ -382,7 +381,7 @@ public class ActModelServiceImpl implements IActModelService {
     public ResultListDataRepresentation getUsers(String filter) {
 
         LambdaQueryWrapper<SysUser> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(org.dromara.common.core.utils.StringUtils.isNotBlank(filter), SysUser::getNickName, filter);
+        wrapper.like(StringUtils.isNotBlank(filter), SysUser::getNickName, filter);
         List<SysUser> sysUsers = sysUserMapper.selectList(wrapper);
         List<UserRepresentation> userRepresentations = new ArrayList<>();
         for (SysUser sysUser : sysUsers) {

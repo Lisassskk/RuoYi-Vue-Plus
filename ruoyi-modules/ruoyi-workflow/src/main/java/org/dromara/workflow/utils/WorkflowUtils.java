@@ -322,6 +322,9 @@ public class WorkflowUtils {
      * @param businessKey 业务id
      */
     public static void setProcessInstanceVo(Object obj, String businessKey) {
+        if (StringUtils.isBlank(businessKey)) {
+            return;
+        }
         ActHiProcinst actHiProcinst = I_ACT_HI_PROCINST_SERVICE.selectByBusinessKey(businessKey);
         if (actHiProcinst == null) {
             ProcessInstanceVo processInstanceVo = new ProcessInstanceVo();
