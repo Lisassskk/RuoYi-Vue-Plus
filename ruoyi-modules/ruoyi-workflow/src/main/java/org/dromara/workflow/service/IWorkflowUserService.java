@@ -1,7 +1,9 @@
 package org.dromara.workflow.service;
 
+import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.system.domain.SysUserRole;
+import org.dromara.system.domain.bo.SysUserBo;
 import org.dromara.system.domain.vo.SysUserVo;
 import org.dromara.workflow.domain.bo.SysUserMultiBo;
 import org.dromara.workflow.domain.vo.TaskVo;
@@ -46,4 +48,13 @@ public interface IWorkflowUserService {
      * @return 结果
      */
     List<SysUserRole> getUserRoleListByRoleIds(List<Long> roleIds);
+
+    /**
+     * 分页查询用户
+     *
+     * @param sysUserBo 参数
+     * @param pageQuery 分页
+     * @return 结果
+     */
+    TableDataInfo<SysUserVo> getUserListByPage(SysUserBo sysUserBo, PageQuery pageQuery);
 }

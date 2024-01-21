@@ -2,17 +2,16 @@ package org.dromara.workflow.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
+import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
+import org.dromara.system.domain.bo.SysUserBo;
 import org.dromara.system.domain.vo.SysUserVo;
 import org.dromara.workflow.domain.bo.SysUserMultiBo;
 import org.dromara.workflow.domain.vo.TaskVo;
 import org.dromara.workflow.service.IWorkflowUserService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,5 +57,16 @@ public class WorkflowUserController extends BaseController {
     @GetMapping("/getUserListByIds/{userIds}")
     public R<List<SysUserVo>> getUserListByIds(@PathVariable List<Long> userIds) {
         return R.ok(workflowUserService.getUserListByIds(userIds));
+    }
+
+    /**
+     * 分页查询用户
+     *
+     * @param sysUserBo 参数
+     * @param pageQuery 分页
+     */
+    @GetMapping("/getUserListByPage")
+    public TableDataInfo<SysUserVo> getUserListByPage(SysUserBo sysUserBo, PageQuery pageQuery) {
+        return workflowUserService.getUserListByPage(sysUserBo, pageQuery);
     }
 }

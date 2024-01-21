@@ -10,10 +10,12 @@ import org.dromara.common.core.enums.UserStatus;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.system.domain.SysUser;
 import org.dromara.system.domain.SysUserRole;
+import org.dromara.system.domain.bo.SysUserBo;
 import org.dromara.system.domain.vo.SysUserVo;
 import org.dromara.system.mapper.SysUserMapper;
 import org.dromara.system.mapper.SysUserRoleMapper;
@@ -190,5 +192,22 @@ public class WorkflowUserServiceImpl implements IWorkflowUserService {
     @Override
     public List<SysUserRole> getUserRoleListByRoleIds(List<Long> roleIds) {
         return sysUserRoleMapper.selectList(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getRoleId, roleIds));
+    }
+
+    /**
+     * 分页查询用户
+     *
+     * @param sysUserBo 参数
+     * @param pageQuery 分页
+     */
+    @Override
+    public TableDataInfo<SysUserVo> getUserListByPage(SysUserBo sysUserBo, PageQuery pageQuery) {
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(sysUserBo.getDeptId() != null, SysUser::getDeptId, sysUserBo.getDeptId());
+        queryWrapper.eq(SysUser::getStatus, UserStatus.OK.getCode());
+        queryWrapper.like(StringUtils.isNotEmpty(sysUserBo.getUserName()), SysUser::getUserName, sysUserBo.getUserName());
+        queryWrapper.like(StringUtils.isNotEmpty(sysUserBo.getNickName()), SysUser::getNickName, sysUserBo.getNickName());
+        Page<SysUserVo> userPage = sysUserMapper.selectVoPage(pageQuery.build(), queryWrapper);
+        return TableDataInfo.build(recordPage(userPage));
     }
 }
