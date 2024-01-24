@@ -171,14 +171,16 @@ public class ActTaskServiceImpl implements IActTaskService {
             } else {
                 taskService.complete(completeTaskBo.getTaskId());
             }
-            List<Task> list = taskService.createTaskQuery().taskTenantId(TenantHelper.getTenantId()).processInstanceId(task.getProcessInstanceId()).list();
-            if (CollUtil.isEmpty(list)) {
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId())
+                .processInstanceTenantId(TenantHelper.getTenantId()).singleResult();
+            if (pi == null) {
                 UpdateBusinessStatusCmd updateBusinessStatusCmd = new UpdateBusinessStatusCmd(task.getProcessInstanceId(), BusinessStatusEnum.FINISH.getStatus());
                 managementService.executeCommand(updateBusinessStatusCmd);
                 if (processHandler != null) {
                     processHandler.handleProcess(processInstance.getBusinessKey(), BusinessStatusEnum.FINISH.getStatus(), false);
                 }
             } else {
+                List<Task> list = taskService.createTaskQuery().taskTenantId(TenantHelper.getTenantId()).processInstanceId(task.getProcessInstanceId()).list();
                 sendMessage(list, processInstance.getName(), completeTaskBo.getMessageType(), null);
             }
             return true;
